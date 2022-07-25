@@ -1,0 +1,300 @@
+/* The sidebar menu */
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #e0e0e0; 
+  overflow-x: hidden;
+  padding-top: 60px;
+  padding-bottom: 10px;
+  transition: 0.5s;
+}
+
+/* The sidebar links */
+.sidebar a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  color: #181818;
+  display: block;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidebar a:hover {
+  color: #710e7e;
+}
+
+/* Position and style the close button (top right corner) */
+.sidebar .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  margin-left: 50px;
+}
+
+/* The button used to open the sidebar */
+.openbtn {
+  cursor: pointer;
+  background-color: #111;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  position:absolute;
+  bottom:0;
+}
+
+.openbtn:hover {
+  background-color: #444;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s; /* If you want a transition effect */
+  padding: 20px;
+}
+
+#mySidebar .form-check{
+  text-align: left;
+  margin-left: 4%;
+  margin-right: 4%;
+}
+
+#mySidebar h2{
+  border-bottom: 1px solid black;
+  text-align: center;
+  margin-left: 10%;
+  margin-right: 5%;
+  padding-bottom: 3%;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidebar {padding-top: 15px;}
+} 
+
+.checkbox-label {
+  text-transform: capitalize;
+}
+
+.form-check-label {
+  width: 100%;
+}
+
+.datepicker {
+  width: 100%;
+}
+
+.form-input {
+  width: 100%;
+}
+
+.filter-form {
+}
+
+#displayAccidentsCheckbox {
+  margin-left: 1%;
+}
+
+#displayAccidentsCheckboxLabel {
+  margin-left: 10%;
+}
+
+#data-overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+#specific-data-overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+.data-view .closebtn {  
+  position: absolute;
+  top: 0;
+  right: 25px;
+  margin-left: 50px;
+  color: white;
+  font-size: 50px;
+}
+
+.specific-data-view .closebtn {  
+  position: absolute;
+  top: 0;
+  right: 25px;
+  margin-left: 50px;
+  color: white;
+  font-size: 50px;
+}
+
+.data-content {
+  background-color: #e0e0e0;
+  padding: 10px;
+  border-radius: 25px;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  height: 500px;
+}
+
+
+.specific-data-content {
+  background-color: #e0e0e0;
+  padding: 10px;
+  border-radius: 25px;
+  margin-left: 29%;
+  margin-right: 29%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  height: 500px;
+}
+
+
+.fatality-info {
+  margin-top: 5%;
+}
+
+ /* Style the tab */
+ .tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.bottom-tab {
+  margin-left: 10px;
+}
+
+.filter-card-close-button {
+  position: absolute;
+  right: 10%;
+  color: red;
+}
+
+.filter-card-footer-text {
+  display: inline-block
+}
+
+.filters-footer {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 0;
+  float: left;
+  display: flex;
+}
+
+.remove-filter-button {
+  width:  100%;
+}
+
+.filter-tab-parent {
+  display: none;
+  flex-direction: column;
+  justify-content: end;
+}
+
+.accident-filters-list-parent {
+  margin: 1rem;
+}
+
+.accident-filter-row {
+  border-top:  1px solid gray;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.climate-filters-list-parent {
+  margin: 1rem;
+}
+
+.climate-filter-row {
+  border-top:  1px solid gray;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.location-filters-list-parent {
+  margin: 1rem;
+}
+
+.location-filter-row {
+  border-top:  1px solid gray;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.time-filters-list-parent {
+  margin: 1rem;
+}
+
+.time-filter-row {
+  border-top:  1px solid gray;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.about-card {
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+  width: 50%;
+  overflow: scroll;
+  flex-direction: column;
+}
+
+.matching-accidents-tooltip {
+  color: #919191;
+  display:  none;
+  white-space: pre-wrap;
+}
