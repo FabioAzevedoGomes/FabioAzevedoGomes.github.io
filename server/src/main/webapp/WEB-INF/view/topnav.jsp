@@ -20,10 +20,10 @@
       <li class="nav-item active dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="fliterDropdown" role="button" data-toggle="dropdown">Filters</a>
         <div class="dropdown-menu" aria-labelledby="fliterDropdown">
-          <a class="dropdown-item" href="#" onclick="addAccidentFilter()">Accidents</a>
-          <a class="dropdown-item" href="#" onclick="addTimeFilter()">Time</a>
-          <a class="dropdown-item" href="#" onclick="addLocationFilter()">Location</a>
-          <a class="dropdown-item" href="#" onclick="addClimateFilter()">Climate</a>
+          <a class="dropdown-item" href="#" onclick="addFilter(FilterClasses.Accident)">Accidents</a>
+          <a class="dropdown-item" href="#" onclick="addFilter(FilterClasses.Time)">Time</a>
+          <a class="dropdown-item" href="#" onclick="addFilter(FilterClasses.Location)">Location</a>
+          <a class="dropdown-item" href="#" onclick="addFilter(FilterClasses.Climate)">Climate</a>
         </div>
       </li>
       <li class="nav-item active">

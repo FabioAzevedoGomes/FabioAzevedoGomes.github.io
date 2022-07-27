@@ -1,22 +1,22 @@
 
 const filterAttributeNames = new Map();
-filterAttributeNames.set('accidents-id-filter','externalId');
-filterAttributeNames.set('accidents-type-filter','type');
-filterAttributeNames.set('accidents-vehicle-filter','involvedEntities');
-filterAttributeNames.set('accidents-light-inj-filter','fatality.light_injuries');
-filterAttributeNames.set('accidents-serious-inj-filter','fatality.serious_injuries');
-filterAttributeNames.set('accidents-death-filter','fatality.deaths');
-filterAttributeNames.set('time-date-filter','date.date');
-filterAttributeNames.set('time-time-filter','date.time_of_day');
-filterAttributeNames.set('climate-visibility-filter','climate.visibility');
-filterAttributeNames.set('climate-precipitation-filter','climate.precipitation_mm');
-filterAttributeNames.set('climate-air-temp-filter','climate.air_temp_celsius');
-filterAttributeNames.set('climate-wind-speed-filter','climate.wind_speed_ms');
-filterAttributeNames.set('climate-relative-humidity-filter','climate.relative_humidity_percentage');
-filterAttributeNames.set('location-street-filter','address.street1');
-filterAttributeNames.set('location-longitude-filter','address.location.longitude');
-filterAttributeNames.set('location-latitude-filter','address.location.latitude');
-filterAttributeNames.set('location-region-filter','address.region');
+filterAttributeNames.set('external-id','externalId');
+filterAttributeNames.set('type','type');
+filterAttributeNames.set('vehicle','involvedEntities');
+filterAttributeNames.set('light-injuries','fatality.light_injuries');
+filterAttributeNames.set('serious-injuries','fatality.serious_injuries');
+filterAttributeNames.set('deaths','fatality.deaths');
+filterAttributeNames.set('date','date.date');
+filterAttributeNames.set('time','date.time_of_day');
+filterAttributeNames.set('visibility','climate.visibility');
+filterAttributeNames.set('precipitation','climate.precipitation_mm');
+filterAttributeNames.set('air-temperature','climate.air_temp_celsius');
+filterAttributeNames.set('wind-speed','climate.wind_speed_ms');
+filterAttributeNames.set('relative-humidity','climate.relative_humidity_percentage');
+filterAttributeNames.set('street','address.street1');
+filterAttributeNames.set('longitude','address.location.longitude');
+filterAttributeNames.set('latitude','address.location.latitude');
+filterAttributeNames.set('region','address.region');
 
 function isNumber(input_string) {
   return !isNaN(parseFloat(input_string)) && isFinite(input_string);

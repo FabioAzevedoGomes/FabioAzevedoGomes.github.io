@@ -30,6 +30,7 @@ function initializeAll() {
         });
     });
 
+    initializeFilters();
 }
 
 window.onload = initializeAll;
