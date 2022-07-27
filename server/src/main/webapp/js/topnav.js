@@ -22,6 +22,7 @@ function updateShowOrHideAccidents() {
         getAccidents();
     } else {
         document.getElementById('matching-accidents-tooltip').style.display = 'none'
+        document.getElementById('match-quantity').innerHTML = 'Looking for';
         clearMap();
     }
 }

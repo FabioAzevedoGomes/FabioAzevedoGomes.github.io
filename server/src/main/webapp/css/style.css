@@ -296,7 +296,7 @@
 .accident-card {
   position: absolute;
   bottom: 0;
-  left: 25%;
+  left: 50%;
   width: 50%;
   overflow: scroll;
   flex-direction: column;
@@ -319,4 +319,23 @@
     height: 100%;
     padding-top: 3%;
     width: 100%;
+}
+
+.card-body {
+  font-size: 20px;
+  text-align:  center;
+}
+
+.accident-card-body {
+  text-align:  left;
+}
+
+.ol-attribution {
+  top: 5px;
+  bottom: unset;
+}
+
+.ol-attribution.ol-uncollapsible {
+  bottom:  unset;
+  right:  0px;
 }

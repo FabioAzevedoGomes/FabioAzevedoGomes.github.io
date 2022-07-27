@@ -33,14 +33,14 @@
 
     <div class="nav-item inactive">
       <div class="nav-link matching-accidents-tooltip" id="matching-accidents-tooltip">
-        <span style ="display: inline-block;" id="match-quantity">?</span> Matching accidents</div>
+        <span style ="display: inline-block;" id="match-quantity">Looking for</span> Matching accidents</div>
     </div>
 
     <!-- Show/Hide -->
     <form class="nav-item">
       <div class="form-inline">
         <div class="custom-control custom-switch my-lg-2">
-          <input type="checkbox" class="custom-control-input" id="showHideSwitch" checked="false"
+          <input type="checkbox" class="custom-control-input" id="showHideSwitch"
             onchange="updateShowOrHideAccidents()">
           <label id="showHideText" class="custom-control-label" for="showHideSwitch">Hide accidents</label>
         </div>
