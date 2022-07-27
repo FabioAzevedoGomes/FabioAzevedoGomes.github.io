@@ -55,6 +55,6 @@ map.on('click', function(evt) {
         return feature;
       });
     if (feature) {
-        displayDetailsPopup(feature.j.attributes.accident);
+        displayAccidentDetails(feature.j.attributes.accident);
     }
 });

@@ -302,8 +302,6 @@ function removeAccidentFilterRow(filter_id) {
         parent.innerHTML = defaultAccidentNoFilterSelected;
     }
 
-    console.log("removed filter row" + filter_id);
-
     if (filter_id != "0") {
         refreshMap();
     }
@@ -941,31 +939,3 @@ function addLocationFilter() {
 	// Show tab
 	showFilter(FilterClasses.Location);
 }
-
-
-document.getElementById('accident-filters-list').addEventListener("click", function(event){
-    event.preventDefault()
-});
-document.getElementById('climate-filters-list').addEventListener("click", function(event){
-    event.preventDefault()
-});
-
-document.getElementById('location-filters-list').addEventListener("click", function(event){
-    event.preventDefault()
-});
-
-document.getElementById('time-filters-list').addEventListener("click", function(event){
-    event.preventDefault()
-});
-
-$(function () {
-    $('#time-date-filter').datetimepicker({
-        format: 'DD/MM/YYYY'
-    });
-});
-
-$(function () {
-    $('#time-time-filter').datetimepicker({
-        format: 'LT'
-    });
-});

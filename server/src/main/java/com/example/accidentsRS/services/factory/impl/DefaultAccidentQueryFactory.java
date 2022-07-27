@@ -24,16 +24,12 @@ public class DefaultAccidentQueryFactory implements AccidentQueryFactory {
         switch (operation) {
             case EQUALS:
             case IS:
+            case HAS:
                 searchCriteria = searchCriteria.is(value);
                 break;
             case IS_NOT:
-                searchCriteria = searchCriteria.ne(value);
-                break;
-            case HAS:
-                searchCriteria = searchCriteria.is(value); // TODO ?
-                break;
             case DOES_NOT_HAVE:
-                searchCriteria = searchCriteria.ne(value); // TODO ?
+                searchCriteria = searchCriteria.ne(value);
                 break;
             case GREATER_OR_EQUAL:
             case AFTER:

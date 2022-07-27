@@ -1,25 +1,22 @@
 <!DOCTYPE html>
-<%@ include file="include/headers.jsp" %>
-    <html lang="en">
-
+<html lang="en">
     <head>
         <title>Accident Viewer</title>
         <link rel="icon" type="image/ico" href="images/favicon.ico" />
-        <script src="/js/homepage.js"></script>
+        <%@ include file="include/external_scripts.jsp" %>
+        <%@ include file="include/local_scripts.jsp" %>
+        <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+        <%@page contentType="text/html;charset=UTF-8" language="java" %>
     </head>
 
     <body>
         <div class="main">
             <%@ include file="topnav.jsp" %>
+            <div id="map" class="map"></div>
             <%@ include file="filters.jsp" %>
-            <div id="specific-data-overlay">
-                <%@ include file="specific-data.jsp" %>
-            </div>
-            <div class="map-area">
-                <%@ include file="map.jsp" %>
-            </div>
-            <%@ include file="about.jsp" %>
+            <%@ include file="accident-card.jsp" %>
+            <%@ include file="about-card.jsp" %>
         </div>
     </body>
-    <script src="js/requests.js"></script>
-    </html>
+</html>

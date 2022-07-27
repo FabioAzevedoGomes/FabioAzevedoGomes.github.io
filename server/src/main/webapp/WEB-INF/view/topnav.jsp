@@ -68,4 +68,3 @@
 
   </div>
 </nav>
-<script src="js/topnav.js"></script>
