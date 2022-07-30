@@ -35,12 +35,6 @@ public class DefaultAccidentFacade implements AccidentFacade {
     AccidentReverseConverter defaultAccidentReverseConverter;
 
     @Autowired
-    FieldValidator<AccidentData> defaultFieldValidator;
-
-    @Autowired
-    FilterValidator<AccidentData> defaultFilterValidator;
-
-    @Autowired
     FilterConverter defaultFilterConverter;
 
     @Override
@@ -57,7 +51,6 @@ public class DefaultAccidentFacade implements AccidentFacade {
 
     @Override
     public List<AccidentData> findAllMatchingFilter(List<FilterWrapperData> accidentFilters) throws ValidationException {
-        defaultFilterValidator.validate(accidentFilters, new AccidentData());
         return defaultAccidentReverseConverter.convertAll(
                 defaultAccidentService.findAllMatchingFilters(
                         defaultFilterConverter.convertAll(accidentFilters)

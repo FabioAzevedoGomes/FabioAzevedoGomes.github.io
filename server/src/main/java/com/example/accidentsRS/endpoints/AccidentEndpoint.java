@@ -5,7 +5,7 @@ import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.exceptions.ValidationException;
 import com.example.accidentsRS.facade.AccidentFacade;
 import com.example.accidentsRS.data.AccidentData;
-import com.example.accidentsRS.services.ValueSearchService;
+import com.example.accidentsRS.services.impl.DefaultValueSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +24,7 @@ public class AccidentEndpoint extends AbstractEndpoint {
     AccidentFacade defaultAccidentFacade;
 
     @Autowired
-    ValueSearchService valueSearchService;
+    DefaultValueSearchService defaultValueSearchService;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public void create(@RequestBody final AccidentData accidentData) throws PersistenceException {
@@ -44,17 +44,17 @@ public class AccidentEndpoint extends AbstractEndpoint {
 
     @RequestMapping(value = "/get/types", method = RequestMethod.GET)
     public List<String> getTypes() {
-        return valueSearchService.getAllAccidentTypes();
+        return defaultValueSearchService.getAllAccidentTypes();
     }
 
     @RequestMapping(value = "/get/vehicles", method = RequestMethod.GET)
     public List<String> getVehicles() {
-        return valueSearchService.getAllVehicleTypes();
+        return defaultValueSearchService.getAllVehicleTypes();
     }
 
     @RequestMapping(value = "/get/regions", method = RequestMethod.GET)
     public List<String> getRegions() {
-        return valueSearchService.getAllRegions();
+        return defaultValueSearchService.getAllRegions();
     }
 
 }

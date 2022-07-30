@@ -31,12 +31,6 @@ public class DefaultClimateFacade implements ClimateFacade {
     @Autowired
     ClimateReverseConverter defaultClimateReverseConverter;
 
-    @Autowired
-    FieldValidator<ClimateData> defaultFieldValidator;
-
-    @Autowired
-    FieldValidator<ClimateData> defaultFilterValidator;
-
     @Override
     public void createClimateRecord(final ClimateData inputClimateData) throws PersistenceException {
         try {
@@ -51,7 +45,6 @@ public class DefaultClimateFacade implements ClimateFacade {
 
     @Override
     public List<ClimateData> findAllMatchingFilter(Map<String, Object> climateFilters) throws ValidationException {
-        defaultFilterValidator.validate(climateFilters, new ClimateData());
         return defaultClimateReverseConverter.convertAll(
                 defaultClimateService.findAllMatchingFilters(climateFilters)
         );
@@ -59,7 +52,7 @@ public class DefaultClimateFacade implements ClimateFacade {
 
     @Override
     public void updateAllMatchingFilter(Map<String, Object> climateFilters, Map<String, Object> newValue) throws ValidationException {
-        defaultFieldValidator.validate(newValue, new ClimateData());
+        // TODO
     }
 
     @Override
