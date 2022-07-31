@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from dataclasses_json import dataclass_json
 
 
 ORIGINAL_DATE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'

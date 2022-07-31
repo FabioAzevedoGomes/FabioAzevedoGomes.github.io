@@ -1,5 +1,7 @@
 package com.example.accidentsRS.model;
 
+import org.springframework.data.geo.Point;
+
 public class Location {
 
     private Float longitude;
@@ -19,5 +21,9 @@ public class Location {
 
     public void setLatitude(Float latitude) {
         this.latitude = latitude;
+    }
+
+    public Point toPoint() {
+        return new Point(this.longitude, this.latitude);
     }
 }

@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from dataclasses_json import dataclass_json
 
 MIN_VALID_LAT_POA = -32
 MAX_VALID_LAT_POA = -28

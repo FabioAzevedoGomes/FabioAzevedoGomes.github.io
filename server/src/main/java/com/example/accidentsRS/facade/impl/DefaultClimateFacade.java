@@ -6,7 +6,6 @@ import com.example.accidentsRS.data.ClimateData;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.exceptions.ValidationException;
 import com.example.accidentsRS.facade.ClimateFacade;
-import com.example.accidentsRS.facade.validator.FieldValidator;
 import com.example.accidentsRS.services.ClimateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionException;

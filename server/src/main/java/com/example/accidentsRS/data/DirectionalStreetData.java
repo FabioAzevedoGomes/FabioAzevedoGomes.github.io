@@ -5,8 +5,10 @@ import com.example.accidentsRS.model.Location;
 public class DirectionalStreetData {
 
     private String externalId;
+    private String directionalId;
     private String name;
     private Location location;
+    private Float length;
     private String source_intersection_id;
     private String destination_intersection_id;
 
@@ -16,6 +18,14 @@ public class DirectionalStreetData {
 
     public void setExternalId(String externalId) {
         this.externalId = externalId;
+    }
+
+    public String getDirectionalId() {
+        return directionalId;
+    }
+
+    public void setDirectionalId(String directionalId) {
+        this.directionalId = directionalId;
     }
 
     public String getName() {
@@ -32,6 +42,14 @@ public class DirectionalStreetData {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public Float getLength() {
+        return length;
+    }
+
+    public void setLength(Float length) {
+        this.length = length;
     }
 
     public String getSource_intersection_id() {

@@ -6,13 +6,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
 @Document(collection = "intersections")
-public class IntersectionModel {
+public class IntersectionModel extends GeoLocation {
 
     @Id
     private String id;
-    private String externalId;
-    private Location location;
     private List<String> connectedStreetIds;
+    private List<String> incomingStreetIds;
+    private List<String> outgoingStreetIds;
 
     public String getId() {
         return id;
@@ -44,5 +44,21 @@ public class IntersectionModel {
 
     public void setConnectedStreetIds(List<String> connectedStreetIds) {
         this.connectedStreetIds = connectedStreetIds;
+    }
+
+    public List<String> getIncomingStreetIds() {
+        return incomingStreetIds;
+    }
+
+    public void setIncomingStreetIds(List<String> incomingStreetIds) {
+        this.incomingStreetIds = incomingStreetIds;
+    }
+
+    public List<String> getOutgoingStreetIds() {
+        return outgoingStreetIds;
+    }
+
+    public void setOutgoingStreetIds(List<String> outgoingStreetIds) {
+        this.outgoingStreetIds = outgoingStreetIds;
     }
 }

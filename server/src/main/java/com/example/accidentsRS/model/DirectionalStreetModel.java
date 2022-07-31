@@ -4,13 +4,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "streets")
-public class DirectionalStreetModel {
+public class DirectionalStreetModel extends GeoLocation {
 
     @Id
     private String id;
-    private String externalId;
+    private String directionalId;
     private String name;
-    private Location location;
+    private Float length;
     private String sourceIntersectionId;
     private String destinationIntersectionId;
 
@@ -30,6 +30,14 @@ public class DirectionalStreetModel {
         this.externalId = externalId;
     }
 
+    public String getDirectionalId() {
+        return directionalId;
+    }
+
+    public void setDirectionalId(String directionalId) {
+        this.directionalId = directionalId;
+    }
+
     public String getName() {
         return name;
     }
@@ -44,6 +52,14 @@ public class DirectionalStreetModel {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public Float getLength() {
+        return length;
+    }
+
+    public void setLength(Float length) {
+        this.length = length;
     }
 
     public String getSourceIntersectionId() {

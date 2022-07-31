@@ -8,8 +8,6 @@ import com.example.accidentsRS.data.FilterWrapperData;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.exceptions.ValidationException;
 import com.example.accidentsRS.facade.AccidentFacade;
-import com.example.accidentsRS.facade.validator.FieldValidator;
-import com.example.accidentsRS.facade.validator.FilterValidator;
 import com.example.accidentsRS.services.AccidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionException;
