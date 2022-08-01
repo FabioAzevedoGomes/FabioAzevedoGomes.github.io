@@ -1,25 +1,25 @@
 
 const filterAttributeNames = new Map();
-filterAttributeNames.set('external-id','externalId');
-filterAttributeNames.set('type','type');
-filterAttributeNames.set('vehicle','involvedEntities');
-filterAttributeNames.set('light-injuries','fatality.light_injuries');
-filterAttributeNames.set('serious-injuries','fatality.serious_injuries');
-filterAttributeNames.set('deaths','fatality.deaths');
-filterAttributeNames.set('date','date.date');
-filterAttributeNames.set('time','date.time_of_day');
-filterAttributeNames.set('visibility','climate.visibility');
-filterAttributeNames.set('precipitation','climate.precipitation_mm');
-filterAttributeNames.set('air-temperature','climate.air_temp_celsius');
-filterAttributeNames.set('wind-speed','climate.wind_speed_ms');
-filterAttributeNames.set('relative-humidity','climate.relative_humidity_percentage');
-filterAttributeNames.set('street','address.street1');
-filterAttributeNames.set('longitude','address.location.longitude');
-filterAttributeNames.set('latitude','address.location.latitude');
-filterAttributeNames.set('region','address.region');
+filterAttributeNames.set('external-id', 'externalId');
+filterAttributeNames.set('type', 'type');
+filterAttributeNames.set('vehicle', 'involvedEntities');
+filterAttributeNames.set('light-injuries', 'fatality.light_injuries');
+filterAttributeNames.set('serious-injuries', 'fatality.serious_injuries');
+filterAttributeNames.set('deaths', 'fatality.deaths');
+filterAttributeNames.set('date', 'date.date');
+filterAttributeNames.set('time', 'date.time_of_day');
+filterAttributeNames.set('visibility', 'climate.visibility');
+filterAttributeNames.set('precipitation', 'climate.precipitation_mm');
+filterAttributeNames.set('air-temperature', 'climate.air_temp_celsius');
+filterAttributeNames.set('wind-speed', 'climate.wind_speed_ms');
+filterAttributeNames.set('relative-humidity', 'climate.relative_humidity_percentage');
+filterAttributeNames.set('street', 'address.street1');
+filterAttributeNames.set('longitude', 'address.location.longitude');
+filterAttributeNames.set('latitude', 'address.location.latitude');
+filterAttributeNames.set('region', 'address.region');
 
 function isNumber(input_string) {
-  return !isNaN(parseFloat(input_string)) && isFinite(input_string);
+    return !isNaN(parseFloat(input_string)) && isFinite(input_string);
 }
 
 function readFilters(type) {
@@ -65,9 +65,9 @@ function readTimeFilters() {
                 timeFilters[filter].value = timeFilters[filter].value.replace("AM", "").trim();
             } else if (timeFilters[filter].value.includes("PM")) {
                 timeFilters[filter].value = timeFilters[filter].value.replace("PM", "").trim();
-                timeFilters[filter].value = moment.utc(timeFilters[filter].value,'hh:mm').add(12,'hour').format('HH:mm');
+                timeFilters[filter].value = moment.utc(timeFilters[filter].value, 'hh:mm').add(12, 'hour').format('HH:mm');
             }
-            timeFilters[filter].value = moment.utc(timeFilters[filter].value,'hh:mm').hour() * 3600000;
+            timeFilters[filter].value = moment.utc(timeFilters[filter].value, 'hh:mm').hour() * 3600000;
         }
     }
 
@@ -80,7 +80,7 @@ function readClimateFilters() {
     for (filter in climateFilters) {
         climateFilters[filter].fields[0] = filterAttributeNames.get(climateFilters[filter].fields[0]);
     }
- 
+
     return climateFilters;
 }
 
@@ -112,25 +112,25 @@ function prepareFilters() {
     }
 }
 
-function refreshMap() {
-    if(document.getElementById("showHideSwitch").checked) {
-        getAccidents();
-    }
-}
-
 function getAccidents() {
-    filters = prepareFilters();
-    $.ajax('/accidents/get', {
+    return $.ajax('/accidents/get', {
         contentType: 'application/json',
         type: 'POST',
-        data: filters,
-        success: function (result) {
-            reloadMap(result);
-        },
+        data: prepareFilters(),
         error: function (result) {
             alert('Error getting map data from backend');
         }
-    }).then(function () {
-        return false;
+    });
+}
+
+function getPointSuggestions(longitude, latitude) {
+    var location = { "longitude": longitude, "latitude": latitude };
+    return $.ajax('/map/point/get', {
+        contentType: 'application/json',
+        type: 'POST',
+        data: JSON.stringify(location),
+        error: function (result) {
+            alert('Error getting map data from backend');
+        }
     });
 }

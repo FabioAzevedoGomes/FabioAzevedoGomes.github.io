@@ -1,19 +1,19 @@
 function hideFilter(elementName) {
-	var accidentFilterTab = document.getElementById(elementName);
-	if (accidentFilterTab) {
-		accidentFilterTab.style.display = 'none';
-	}
+    var accidentFilterTab = document.getElementById(elementName);
+    if (accidentFilterTab) {
+        accidentFilterTab.style.display = 'none';
+    }
 }
 
 function showFilter(elementName) {
-	var accidentFilterTab = document.getElementById(elementName);
-	if (accidentFilterTab) {
-		accidentFilterTab.style.display = 'flex';
-	}	
+    var accidentFilterTab = document.getElementById(elementName);
+    if (accidentFilterTab) {
+        accidentFilterTab.style.display = 'flex';
+    }
 }
 
 function getUniqueUuid() {
-	return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
 function removeFilter(filterClass) {
@@ -24,7 +24,7 @@ function removeFilter(filterClass) {
         filterList.innerHTML = defaultNoFilterSelectedRowTemplate.replace(filterTypePlaceholder, filterClass);;
     }
 
-    refreshMap();
+    globalMap.reloadLayer(LayerNames.Accident);
 }
 
 function addFilter(filterClass) {
@@ -44,7 +44,7 @@ class FilterRow {
         if (fetchUrl) {
             $.ajax(fetchUrl, {
                 type: 'GET',
-                success: function(result) {
+                success: function (result) {
                     var inputOptionsId = filterInputIdTemplate
                         .replaceAll(filterTypePlaceholder, filterClass)
                         .replaceAll(filterAttributePlaceholder, filteredAttribute);
@@ -58,7 +58,7 @@ class FilterRow {
                         });
                     }
                 },
-                error: function(result) {
+                error: function (result) {
                     alert(`Error getting ${filteredAttribute} data from backend`);
                 }
             });

@@ -34,7 +34,7 @@ public class MapEndpoint extends AbstractEndpoint {
         defaultMapFacade.addStreet(streetData);
     }
 
-    @RequestMapping(value = "/point/get", method = RequestMethod.GET)
+    @RequestMapping(value = "/point/get", method = RequestMethod.POST)
     public List<GeoPointData> getPointDisambiguation(@RequestBody final Location location) {
         return defaultMapFacade.findNearestPoints(location);
     }

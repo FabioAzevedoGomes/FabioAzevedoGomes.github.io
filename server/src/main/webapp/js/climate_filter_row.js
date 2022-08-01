@@ -58,7 +58,7 @@ class ClimateFilterRow extends FilterRow {
 
             selectedFiltersList.innerHTML = selectedFiltersList.innerHTML + newFilterHTMLbody;
         }
-        refreshMap();
+        globalMap.reloadLayer(LayerNames.Accident);
     }
 
     removeFilterRow(filterId) {
@@ -73,7 +73,7 @@ class ClimateFilterRow extends FilterRow {
         }
 
         if (filterId != noFilterId) {
-            refreshMap();
+            globalMap.reloadLayer(LayerNames.Accident);
         }
     }
 }

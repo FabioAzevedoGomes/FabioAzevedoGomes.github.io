@@ -66,7 +66,7 @@ class LocationFilterRow extends FilterRow {
 
             selectedFiltersList.innerHTML = selectedFiltersList.innerHTML + newFilterHTMLbody;
         }
-        refreshMap();
+        globalMap.reloadLayer(LayerNames.Accident);
     }
 
     removeFilterRow(filterId) {
@@ -81,7 +81,7 @@ class LocationFilterRow extends FilterRow {
         }
 
         if (filterId != noFilterId) {
-            refreshMap();
+            globalMap.reloadLayer(LayerNames.Accident);
         }
     }
 }

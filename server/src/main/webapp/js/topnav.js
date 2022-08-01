@@ -19,16 +19,16 @@ function updateShowOrHideAccidents() {
     updateShowHideText(shouldShow)
     if (shouldShow) {
         document.getElementById('matching-accidents-tooltip').style.display = 'flex'
-        getAccidents();
+        globalMap.reloadLayer(LayerNames.Accident);
     } else {
         document.getElementById('matching-accidents-tooltip').style.display = 'none'
         document.getElementById('match-quantity').innerHTML = 'Looking for';
-        clearMap();
+        globalMap.disableLayer(LayerNames.Accident);
     }
 }
 
 function toggleAbout() {
-    var aboutCard = document.getElementById('about-card-wrapper'); 
+    var aboutCard = document.getElementById('about-card-wrapper');
     if (aboutCard) {
         if (aboutCard.style.display == 'flex') {
             aboutCard.style.display = 'none';

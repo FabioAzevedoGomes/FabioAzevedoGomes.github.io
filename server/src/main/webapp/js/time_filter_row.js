@@ -81,7 +81,7 @@ class TimeFilterRow extends FilterRow {
 
             selectedFiltersList.innerHTML = selectedFiltersList.innerHTML + newFilterHTMLbody;
         }
-        refreshMap();
+        globalMap.reloadLayer(LayerNames.Accident);
     }
 
     removeFilterRow(filterId) {
@@ -96,7 +96,7 @@ class TimeFilterRow extends FilterRow {
         }
 
         if (filterId != noFilterId) {
-            refreshMap();
+            globalMap.reloadLayer(LayerNames.Accident);
         }
     }
 }
