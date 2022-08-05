@@ -13,6 +13,7 @@
     <body>
         <div class="main">
             <%@ include file="topnav.jsp" %>
+            <%@ include file="modals.jsp" %>
             <div id="map" class="map"></div>
             <%@ include file="filters.jsp" %>
             <%@ include file="accident-card.jsp" %>

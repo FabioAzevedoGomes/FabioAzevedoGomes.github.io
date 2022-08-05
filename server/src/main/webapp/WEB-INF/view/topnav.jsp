@@ -8,7 +8,8 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" data-toggle="collapse" href="#body-about" aria-expanded="true" aria-controls="body-about" onclick="toggleAbout()">
+        <a class="nav-link" data-toggle="collapse" href="#body-about" aria-expanded="true" aria-controls="body-about"
+          onclick="toggleAbout()">
           About<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
@@ -18,7 +19,8 @@
         <a class="nav-link" href="#">Statistics</a>
       </li>
       <li class="nav-item active dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="fliterDropdown" role="button" data-toggle="dropdown">Filters</a>
+        <a class="nav-link dropdown-toggle" href="#" id="fliterDropdown" role="button"
+          data-toggle="dropdown">Filters</a>
         <div class="dropdown-menu" aria-labelledby="fliterDropdown">
           <a class="dropdown-item" href="#" onclick="addFilter(FilterClasses.Accident)">Accidents</a>
           <a class="dropdown-item" href="#" onclick="addFilter(FilterClasses.Time)">Time</a>
@@ -27,13 +29,14 @@
         </div>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="#">Suggest a path</a>
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#pickFirstLocationModal">Suggest a path</a>
       </li>
     </ul>
 
     <div class="nav-item inactive">
       <div class="nav-link matching-accidents-tooltip" id="matching-accidents-tooltip">
-        <span style ="display: inline-block;" id="match-quantity">Looking for</span> Matching accidents</div>
+        <span style="display: inline-block;" id="match-quantity">Looking for</span> Matching accidents
+      </div>
     </div>
 
     <!-- Show/Hide -->

@@ -5,11 +5,13 @@ import com.example.accidentsRS.converter.IntersectionConverter;
 import com.example.accidentsRS.data.DirectionalStreetData;
 import com.example.accidentsRS.data.GeoPointData;
 import com.example.accidentsRS.data.IntersectionData;
+import com.example.accidentsRS.data.PathSuggestionParameterWrapper;
 import com.example.accidentsRS.facade.MapFacade;
-import com.example.accidentsRS.factory.GeoPointConverterFactory;
+import com.example.accidentsRS.facade.factory.GeoPointConverterFactory;
 import com.example.accidentsRS.model.GeoLocation;
 import com.example.accidentsRS.model.Location;
 import com.example.accidentsRS.services.MapService;
+import com.example.accidentsRS.services.PathfindingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +34,9 @@ public class DefaultMapFacade implements MapFacade {
 
     @Autowired
     MapService defaultMapService;
+
+    @Autowired
+    PathfindingService defaultPathFindingService;
 
     @Override
     public void addStreet(final DirectionalStreetData directionalStreetData) {
@@ -61,5 +66,10 @@ public class DefaultMapFacade implements MapFacade {
         );
 
         return geoPointDataList;
+    }
+
+    @Override
+    public List<Location> suggestPath(final PathSuggestionParameterWrapper pathSuggestionParameter) {
+        return defaultPathFindingService.findPath(pathSuggestionParameter);
     }
 }

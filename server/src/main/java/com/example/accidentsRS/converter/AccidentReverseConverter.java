@@ -8,6 +8,5 @@ import java.util.List;
 
 public interface AccidentReverseConverter extends Converter<AccidentModel, AccidentData> {
     AccidentData convert(AccidentModel accidentModel);
-
     List<AccidentData> convertAll(List<AccidentModel> accidentModelModelList);
 }

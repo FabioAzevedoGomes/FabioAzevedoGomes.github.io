@@ -1,7 +1,7 @@
-package com.example.accidentsRS.factory.impl;
+package com.example.accidentsRS.facade.factory.impl;
 
 import com.example.accidentsRS.converter.GeoPointReverseConverter;
-import com.example.accidentsRS.factory.GeoPointConverterFactory;
+import com.example.accidentsRS.facade.factory.GeoPointConverterFactory;
 import com.example.accidentsRS.model.DirectionalStreetModel;
 import com.example.accidentsRS.model.GeoLocation;
 import com.example.accidentsRS.model.IntersectionModel;

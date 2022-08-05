@@ -1,5 +1,3 @@
-let isChoosingLocation = true; // TODO Change this later
-
 const LayerNames = {
     Accident: "Accident",
     LocationSuggestion: "LocationSuggestion"
@@ -13,6 +11,7 @@ class BaseLayer {
         this.active = false;
         this.sourceVector = new ol.source.Vector({ features: this.features });
         this.layerVector = new ol.layer.Vector({
+            declutter: true,
             source: this.sourceVector,
             name: this.name
         });
@@ -21,6 +20,7 @@ class BaseLayer {
     reload() {
         this.sourceVector = new ol.source.Vector({ features: this.features });
         this.layerVector = new ol.layer.Vector({
+            declutter: true,
             source: this.sourceVector,
             name: this.name
         });
@@ -100,25 +100,53 @@ class AccidentsLayer extends BaseLayer {
 class LocationSuggestionLayer extends BaseLayer {
 
     LAYER_NAME = `LocationSuggestion`;
+    States = {
+        ChoosingInitialLocation: "ChoosingInitialLocation",
+        ChoosingBetweenOptions: "ChoosingBetweenOptions",
+        Idle: "Idle"
+    }
 
     constructor() {
         super(`LocationSuggestion`);
+        this.state = this.States.ChoosingInitialLocation;
+    }
+
+    handleChoosingInitialLocation(evt) {
+        var lonLatArray = ol.proj.toLonLat(evt.coordinate);
+        getPointSuggestions(
+            lonLatArray[0],
+            lonLatArray[1]
+        ).then(points => {
+            points.forEach(point => {
+                let location = point['location'];
+                if (location.longitude && location.latitude) {
+                    let feature = this.makePointFeature(point, location);
+                    feature.style = { strokeWidth: 5, strokeColor: '#ff0000' };
+                    this.features.push(feature);
+                }
+            });
+            globalMap.enableLayer(this.LAYER_NAME);
+            this.state = this.States.ChoosingBetweenOptions;
+            globalMap.centerOnLayer(this.LAYER_NAME);
+        });
+    }
+
+    handleChoosingBetweenOptions(evt) {
+        var feature = globalMap.map.forEachFeatureAtPixel(evt.pixel, function (feature) { return feature; });
+        if (feature) {
+            // For when this is implemented
+            //globalPathfinder.setStart(feature['data'].externalId);
+        }
+        this.state = this.States.Idle;
     }
 
     processClick(evt) {
-        if (isChoosingLocation) {
-            var lonLatArray = ol.proj.toLonLat(evt.coordinate);
-            getPointSuggestions(
-                lonLatArray[0],
-                lonLatArray[1]
-            ).then(points => {
-                points.forEach(point => {
-                    let location = point['location'];
-                    if (location.longitude && location.latitude) {
-                        this.features.push(this.makePointFeature(point, location));
-                    }
-                });
-            }).then(() => globalMap.enableLayer(this.LAYER_NAME));
+        if (this.state == this.States.ChoosingInitialLocation) {
+            this.handleChoosingInitialLocation(evt);
+        } else if (this.state == this.States.ChoosingBetweenOptions) {
+            this.handleChoosingBetweenOptions(evt);
+        } else if (this.state == this.States.Idle) {
+            // Do nothing
         }
     }
 
@@ -196,6 +224,18 @@ class MyMap {
                 layer.enable();
             });
         this.map.render();
+    }
+
+    centerOnLayer(layerName) {
+        this.layers
+            .filter(layer => layer.getName() == layerName)
+            .forEach(layer => {
+                if (layer.features && layer.features.length > 0) {
+                    this.map.getView().fit(layer.getVectorLayer().getSource().getExtent(), {
+                        size: this.map.getSize(),
+                    });
+                }
+            });
     }
 }
 

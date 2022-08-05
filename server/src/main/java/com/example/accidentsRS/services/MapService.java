@@ -9,12 +9,8 @@ import org.springframework.data.geo.Point;
 import java.util.List;
 
 public interface MapService {
-
     void addStreet(DirectionalStreetModel directionalStreetModel);
-
     void addIntersection(IntersectionModel intersectionModel);
-
     ExtendedIntersectionModel getIntersectionDescription(String externalId);
-
     List<GeoLocation> findNearestPoints(Point point, int maxMatches);
 }

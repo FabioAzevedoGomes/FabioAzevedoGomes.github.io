@@ -1,4 +1,4 @@
-package com.example.accidentsRS.factory;
+package com.example.accidentsRS.facade.factory;
 
 import com.example.accidentsRS.converter.GeoPointReverseConverter;
 import com.example.accidentsRS.model.GeoLocation;

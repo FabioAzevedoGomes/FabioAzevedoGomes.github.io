@@ -3,6 +3,7 @@ package com.example.accidentsRS.endpoints;
 import com.example.accidentsRS.data.DirectionalStreetData;
 import com.example.accidentsRS.data.GeoPointData;
 import com.example.accidentsRS.data.IntersectionData;
+import com.example.accidentsRS.data.PathSuggestionParameterWrapper;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.facade.MapFacade;
 import com.example.accidentsRS.model.Location;
@@ -37,5 +38,10 @@ public class MapEndpoint extends AbstractEndpoint {
     @RequestMapping(value = "/point/get", method = RequestMethod.POST)
     public List<GeoPointData> getPointDisambiguation(@RequestBody final Location location) {
         return defaultMapFacade.findNearestPoints(location);
+    }
+
+    @RequestMapping(value = "/path/suggest", method = RequestMethod.POST)
+    public List<Location> suggestPath(@RequestBody final PathSuggestionParameterWrapper pathSuggestionParameters) {
+        return defaultMapFacade.suggestPath(pathSuggestionParameters);
     }
 }

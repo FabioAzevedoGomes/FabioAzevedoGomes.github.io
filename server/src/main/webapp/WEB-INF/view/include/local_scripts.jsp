@@ -9,5 +9,6 @@
 <script src="js/time_filter_row.js"></script>
 <script src="js/location_filter_row.js"></script>
 <script src="js/init.js"></script>
+<script src="js/pathfind.js" defer></script>
 <script src="js/map.js" defer></script>
 <link rel="stylesheet" href="/css/style.css"></link>
