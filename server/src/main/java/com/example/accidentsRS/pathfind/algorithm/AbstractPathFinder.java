@@ -3,14 +3,16 @@ package com.example.accidentsRS.pathfind.algorithm;
 import com.example.accidentsRS.exceptions.NoSuchPathException;
 import com.example.accidentsRS.model.Location;
 import com.example.accidentsRS.pathfind.PathFinder;
+import com.example.accidentsRS.pathfind.factory.GraphFactory;
 import com.example.accidentsRS.pathfind.graph.Graph;
-import com.example.accidentsRS.pathfind.graph.inmemory.ChunkedHashGraph;
 
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
 public abstract class AbstractPathFinder implements PathFinder {
+
+    private GraphFactory defaultGraphFactory;
 
     protected static class SafeValueMap<S> extends HashMap<S, Float> {
         @Override
@@ -43,11 +45,23 @@ public abstract class AbstractPathFinder implements PathFinder {
     }
 
     protected AbstractPathFinder() {
-        this.graph = new ChunkedHashGraph();
+
+    }
+
+    protected void initializeAlgorithm(final String startId, final String endId) {
+        this.graph = getDefaultGraphFactory().getChunkedGraph();
     }
 
     @Override
     public abstract List<Location> getPathBetween(String start, String end) throws NoSuchPathException;
 
     protected abstract float getHeuristicValueOf(String node);
+
+    public GraphFactory getDefaultGraphFactory() {
+        return defaultGraphFactory;
+    }
+
+    public void setDefaultGraphFactory(GraphFactory defaultGraphFactory) {
+        this.defaultGraphFactory = defaultGraphFactory;
+    }
 }

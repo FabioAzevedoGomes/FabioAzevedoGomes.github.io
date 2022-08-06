@@ -61,6 +61,16 @@ public class DefaultMapDao implements MapDao {
         return getCircleAround(getStreet(directionalId), radius);
     }
 
+    @Override
+    public List<IntersectionModel> getAllIntersections() {
+        return mongoOperations.findAll(IntersectionModel.class);
+    }
+
+    @Override
+    public List<DirectionalStreetModel> getAllStreets() {
+        return mongoOperations.findAll(DirectionalStreetModel.class);
+    }
+
     protected Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAround(final GeoLocation point, final float radius) {
         final Circle shape = new Circle(
                 new Point(

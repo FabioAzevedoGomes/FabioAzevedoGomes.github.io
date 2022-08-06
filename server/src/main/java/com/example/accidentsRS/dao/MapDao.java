@@ -13,4 +13,6 @@ public interface MapDao {
     List<DirectionalStreetModel> getStreets(List<String> directionalIds);
     Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAroundIntersection(String externalId, float radius);
     Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAroundStreet(String directionalId, float radius);
+    List<IntersectionModel> getAllIntersections();
+    List<DirectionalStreetModel> getAllStreets();
 }

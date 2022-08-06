@@ -6,5 +6,5 @@ public interface Graph {
     List<Edge> getNeighborEdges(String nodeId);
     List<Node> getNeighborNodes(String nodeId);
     Node getNode(String nodeId);
-    Edge getEdge(String EdgeId);
+    Edge getEdge(String edgeId);
 }

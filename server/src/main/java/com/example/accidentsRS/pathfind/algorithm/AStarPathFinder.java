@@ -3,6 +3,7 @@ package com.example.accidentsRS.pathfind.algorithm;
 import com.example.accidentsRS.exceptions.NoSuchPathException;
 import com.example.accidentsRS.model.Location;
 import com.example.accidentsRS.pathfind.graph.Edge;
+import com.example.accidentsRS.pathfind.graph.Graph;
 import org.springframework.util.CollectionUtils;
 
 
@@ -18,6 +19,14 @@ public class AStarPathFinder extends AbstractPathFinder {
     private SafeValueMap<String> heuristicValueOf;
     private Location destinationLocation;
 
+    public AStarPathFinder(Graph graph) {
+        super(graph);
+    }
+
+    public AStarPathFinder() {
+
+    }
+
     protected float getHeuristicScore(final String nodeId) {
         final Location nodeLocation = graph.getNode(nodeId).getData().getLocation();
         float lat1 = nodeLocation.getLatitude();
@@ -27,7 +36,9 @@ public class AStarPathFinder extends AbstractPathFinder {
         return (float) Math.sqrt((lat2 - lat1) * (lat2 - lat1) + (lon2 - lon1) * (lon2 - lon1));
     }
 
+    @Override
     protected void initializeAlgorithm(final String startId, final String endId) {
+        super.initializeAlgorithm(startId, endId);
         this.openSet = new PriorityQueue<>(new HeuristicNodeComparator());
         this.cameFrom = new HashMap<>();
         this.valueOf = new SafeValueMap<>();
@@ -73,7 +84,7 @@ public class AStarPathFinder extends AbstractPathFinder {
                     cameFrom.put(neighbor, current);
                     valueOf.put(neighbor, score);
                     heuristicValueOf.put(neighbor, score + getHeuristicScore(neighbor));
-                    if (openSet.contains(neighbor)) {
+                    if (!openSet.contains(neighbor)) {
                         openSet.offer(neighbor);
                     }
                 }
