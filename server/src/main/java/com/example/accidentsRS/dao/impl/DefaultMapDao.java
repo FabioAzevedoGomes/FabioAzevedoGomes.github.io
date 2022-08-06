@@ -4,8 +4,13 @@ import com.example.accidentsRS.dao.MapDao;
 import com.example.accidentsRS.model.DirectionalStreetModel;
 import com.example.accidentsRS.model.GeoLocation;
 import com.example.accidentsRS.model.IntersectionModel;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Circle;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,6 +22,8 @@ import java.util.List;
 
 @Component
 public class DefaultMapDao implements MapDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMapDao.class);
 
     @Autowired
     MongoOperations mongoOperations;
@@ -52,13 +59,13 @@ public class DefaultMapDao implements MapDao {
     }
 
     @Override
-    public Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAroundIntersection(String externalId, float radius) {
-        return getCircleAround(getIntersection(externalId), radius);
+    public Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAroundIntersection(String externalId, float radiusKilometers) {
+        return getCircleAround(getIntersection(externalId), radiusKilometers);
     }
 
     @Override
-    public Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAroundStreet(String directionalId, float radius) {
-        return getCircleAround(getStreet(directionalId), radius);
+    public Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAroundStreet(String directionalId, float radiusKilometers) {
+        return getCircleAround(getStreet(directionalId), radiusKilometers);
     }
 
     @Override
@@ -71,12 +78,13 @@ public class DefaultMapDao implements MapDao {
         return mongoOperations.findAll(DirectionalStreetModel.class);
     }
 
-    protected Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAround(final GeoLocation point, final float radius) {
+    protected Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAround(final GeoLocation point, final float radiusKilometers) {
+        LOGGER.info("Accessing database");
         final Circle shape = new Circle(
                 new Point(
                         point.getLocation().getLongitude(),
                         point.getLocation().getLatitude()),
-                radius
+                new Distance(radiusKilometers, Metrics.KILOMETERS)
         );
         return Pair.of(
                 mongoOperations.find(Query.query(Criteria.where("location").withinSphere(shape)), IntersectionModel.class),

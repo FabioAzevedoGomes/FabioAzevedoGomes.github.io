@@ -11,20 +11,20 @@ import java.util.stream.Collectors;
 
 public class ChunkedHashGraph extends AbstractInMemoryGraph {
 
-    private static final float EXPANSION_RADIUS = 0.5f;
+    private static final float EXPANSION_RADIUS_KILOMETERS = 10.0f;
 
     protected void loadRegionAroundNode(final String nodeId) {
-        populateExpansionResults(super.getMapDao().getCircleAroundIntersection(nodeId, EXPANSION_RADIUS));
+        populateExpansionResults(super.getMapDao().getCircleAroundIntersection(nodeId, EXPANSION_RADIUS_KILOMETERS));
     }
 
     protected void loadRegionAroundEdge(final String edgeId) {
-        populateExpansionResults(super.getMapDao().getCircleAroundStreet(edgeId, EXPANSION_RADIUS));
+        populateExpansionResults(super.getMapDao().getCircleAroundStreet(edgeId, EXPANSION_RADIUS_KILOMETERS));
     }
 
     protected void populateExpansionResults(Pair<List<IntersectionModel>, List<DirectionalStreetModel>> expansionResults) {
-        expansionResults.getFirst().forEach(intersection -> {
-            loadedNodes.put(intersection.getExternalId(), new Node(intersection));
-        });
+        expansionResults.getFirst().forEach(intersection ->
+                loadedNodes.put(intersection.getExternalId(), new Node(intersection))
+        );
         expansionResults.getSecond().forEach(street -> {
             loadedEdges.put(street.getDirectionalId(), new Edge(street));
             loadedConnections.update(
@@ -55,7 +55,7 @@ public class ChunkedHashGraph extends AbstractInMemoryGraph {
 
     @Override
     public Node getNode(final String nodeId) {
-        if (!loadedNodes.containsKey(nodeId) || !loadedConnections.containsKey(nodeId)) {
+        if (!loadedNodes.containsKey(nodeId)) {
             loadRegionAroundNode(nodeId);
         }
         return loadedNodes.get(nodeId);
