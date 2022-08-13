@@ -2,3 +2,9 @@ documentation/
 database/
 data_source/
 dbl/cache/
+predictions/
+*.pkl
+__pycache__/
+.mypy_cache
+.ipynb_checkpoints
+.vscode

@@ -57,4 +57,8 @@ public class AccidentEndpoint extends AbstractEndpoint {
         return defaultValueSearchService.getAllRegions();
     }
 
+    @RequestMapping(value = "/get/dates", method = RequestMethod.GET)
+    public List<java.util.Date> getDates() {
+        return defaultValueSearchService.getAllDates();
+    }
 }

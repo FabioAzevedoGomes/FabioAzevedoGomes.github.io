@@ -2,7 +2,9 @@ package com.example.accidentsRS.facade.impl;
 
 import com.example.accidentsRS.converter.ClimateConverter;
 import com.example.accidentsRS.converter.ClimateReverseConverter;
+import com.example.accidentsRS.converter.FilterConverter;
 import com.example.accidentsRS.data.ClimateData;
+import com.example.accidentsRS.data.FilterWrapperData;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.exceptions.ValidationException;
 import com.example.accidentsRS.facade.ClimateFacade;
@@ -30,6 +32,9 @@ public class DefaultClimateFacade implements ClimateFacade {
     @Autowired
     ClimateReverseConverter defaultClimateReverseConverter;
 
+    @Autowired
+    FilterConverter defaultFilterConverter;
+
     @Override
     public void createClimateRecord(final ClimateData inputClimateData) throws PersistenceException {
         try {
@@ -43,9 +48,9 @@ public class DefaultClimateFacade implements ClimateFacade {
     }
 
     @Override
-    public List<ClimateData> findAllMatchingFilter(Map<String, Object> climateFilters) throws ValidationException {
+    public List<ClimateData> findAllMatchingFilter(List<FilterWrapperData> climateFilters) throws ValidationException {
         return defaultClimateReverseConverter.convertAll(
-                defaultClimateService.findAllMatchingFilters(climateFilters)
+                defaultClimateService.findAllMatchingFilters(defaultFilterConverter.convertAll(climateFilters))
         );
     }
 

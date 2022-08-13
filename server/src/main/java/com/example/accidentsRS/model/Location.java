@@ -7,6 +7,11 @@ public class Location {
     private Float longitude;
     private Float latitude;
 
+    public Location(Float longitude, Float latitude) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
     public Float getLongitude() {
         return longitude;
     }

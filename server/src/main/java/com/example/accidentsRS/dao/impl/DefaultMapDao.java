@@ -79,7 +79,6 @@ public class DefaultMapDao implements MapDao {
     }
 
     protected Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAround(final GeoLocation point, final float radiusKilometers) {
-        LOGGER.info("Accessing database");
         final Circle shape = new Circle(
                 new Point(
                         point.getLocation().getLongitude(),

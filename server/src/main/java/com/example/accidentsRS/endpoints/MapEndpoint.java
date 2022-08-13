@@ -7,7 +7,9 @@ import com.example.accidentsRS.data.PathSuggestionParameterWrapper;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.facade.MapFacade;
 import com.example.accidentsRS.model.Location;
+import com.example.accidentsRS.services.ValueSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +26,9 @@ public class MapEndpoint extends AbstractEndpoint {
 
     @Autowired
     MapFacade defaultMapFacade;
+
+    @Autowired
+    ValueSearchService defaultValueSearchService;
 
     @RequestMapping(value = "/intersection/create", method = RequestMethod.POST)
     public void createIntersection(@RequestBody final IntersectionData intersectionData) throws PersistenceException {
@@ -43,5 +48,10 @@ public class MapEndpoint extends AbstractEndpoint {
     @RequestMapping(value = "/path/suggest", method = RequestMethod.POST)
     public List<Location> suggestPath(@RequestBody final PathSuggestionParameterWrapper pathSuggestionParameters) {
         return defaultMapFacade.suggestPath(pathSuggestionParameters);
+    }
+
+    @RequestMapping(value = "/get/bbox", method = RequestMethod.GET)
+    public Pair<Location, Location> getBoundingBox() {
+        return defaultValueSearchService.getBoundingBox();
     }
 }

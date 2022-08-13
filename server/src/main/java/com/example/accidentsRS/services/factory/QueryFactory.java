@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import java.util.List;
 
 
-public interface AccidentQueryFactory {
+public interface QueryFactory {
     Query createQueryFromFilters(List<FilterWrapperModel> filters);
     Query createTimeQuery(Date dateTime);
 }

@@ -3,7 +3,7 @@ package com.example.accidentsRS.services.factory.impl;
 import com.example.accidentsRS.model.Date;
 import com.example.accidentsRS.model.filter.FilterWrapperModel;
 import com.example.accidentsRS.model.filter.OperationEnum;
-import com.example.accidentsRS.services.factory.AccidentQueryFactory;
+import com.example.accidentsRS.services.factory.QueryFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class DefaultAccidentQueryFactory implements AccidentQueryFactory {
+public class DefaultQueryFactory implements QueryFactory {
 
     private static final int TIME_OF_DAY_CONSTANT = 3600000;
 

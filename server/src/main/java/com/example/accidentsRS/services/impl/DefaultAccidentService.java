@@ -5,7 +5,7 @@ import com.example.accidentsRS.model.Climate;
 import com.example.accidentsRS.model.Date;
 import com.example.accidentsRS.model.filter.FilterWrapperModel;
 import com.example.accidentsRS.services.AccidentService;
-import com.example.accidentsRS.services.factory.AccidentQueryFactory;
+import com.example.accidentsRS.services.factory.QueryFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Update;
@@ -20,7 +20,7 @@ public class DefaultAccidentService implements AccidentService {
     MongoOperations mongoOperations;
 
     @Autowired
-    AccidentQueryFactory defaultAccidentQueryFactory;
+    QueryFactory defaultQueryFactory;
 
     @Override
     public void createAccidentRecord(final AccidentModel accidentModel) {
@@ -30,7 +30,7 @@ public class DefaultAccidentService implements AccidentService {
     @Override
     public List<AccidentModel> findAllMatchingFilters(final List<FilterWrapperModel> accidentFilters) {
         return mongoOperations.find(
-                defaultAccidentQueryFactory.createQueryFromFilters(accidentFilters),
+                defaultQueryFactory.createQueryFromFilters(accidentFilters),
                 AccidentModel.class
         );
     }
@@ -44,7 +44,7 @@ public class DefaultAccidentService implements AccidentService {
     @Override
     public void updateWithClimateData(final Climate climate, final Date dateTime) {
         mongoOperations.updateMulti(
-                defaultAccidentQueryFactory.createTimeQuery(dateTime),
+                defaultQueryFactory.createTimeQuery(dateTime),
                 createUpdate(climate),
                 AccidentModel.class
         );

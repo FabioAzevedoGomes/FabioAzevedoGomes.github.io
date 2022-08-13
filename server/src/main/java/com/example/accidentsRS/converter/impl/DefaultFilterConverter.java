@@ -8,17 +8,14 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Component
 public class DefaultFilterConverter implements FilterConverter {
 
     private static final String FILTER_DATE_FORMAT = "dd/MM/yyyy";
-    private static final Pattern DATE_PATTERN = Pattern.compile("[0-9]{2}/[0-9]{2}/[0-9]{4}");
+    private static final Pattern DATE_PATTERN = Pattern.compile("[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}");
 
     protected boolean isDate(final Object value) {
         return value instanceof String && DATE_PATTERN.matcher((String) value).find();
@@ -27,7 +24,10 @@ public class DefaultFilterConverter implements FilterConverter {
     protected void processDateFilterValue(final FilterWrapperData filterWrapperData,
                                           final FilterWrapperModel filterWrapperModel) {
         try {
-            Date inputDate = new SimpleDateFormat(FILTER_DATE_FORMAT).parse((String) filterWrapperData.getValue());
+            SimpleDateFormat dateFormat = new SimpleDateFormat(FILTER_DATE_FORMAT);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT-3"));
+            Date inputDate = dateFormat.parse((String) filterWrapperData.getValue());
+
             filterWrapperModel.setValue(inputDate);
         } catch (ParseException parseException) {
             // Should never happen as we check before parsing

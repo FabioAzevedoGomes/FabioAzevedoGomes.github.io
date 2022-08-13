@@ -1,6 +1,7 @@
 package com.example.accidentsRS.endpoints;
 
 import com.example.accidentsRS.data.ClimateData;
+import com.example.accidentsRS.data.FilterWrapperData;
 import com.example.accidentsRS.endpoints.data.UpdateWrapper;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.exceptions.ValidationException;
@@ -11,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import static java.util.Objects.isNull;
 
 @RestController
 @RequestMapping(value = "/climate")
@@ -28,9 +33,13 @@ public class ClimateEndpoint extends AbstractEndpoint {
         defaultClimateFacade.createClimateRecord(climateData);
     }
 
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public void getSome(@RequestBody final Map<String, Object> getFilters) throws ValidationException {
-        defaultClimateFacade.findAllMatchingFilter(getFilters);
+    @RequestMapping(value = "/get", method = RequestMethod.POST)
+    public List<ClimateData> getSome(@RequestBody(required = false) final List<FilterWrapperData> getFilters) throws ValidationException {
+        if (isNull(getFilters)) {
+            return defaultClimateFacade.findAllMatchingFilter(new ArrayList<>());
+        } else {
+            return defaultClimateFacade.findAllMatchingFilter(getFilters);
+        }
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
