@@ -6,6 +6,7 @@ import com.example.accidentsRS.data.DirectionalStreetData;
 import com.example.accidentsRS.data.GeoPointData;
 import com.example.accidentsRS.data.IntersectionData;
 import com.example.accidentsRS.data.PathSuggestionParameterWrapper;
+import com.example.accidentsRS.exceptions.NoSuchPathException;
 import com.example.accidentsRS.facade.MapFacade;
 import com.example.accidentsRS.facade.factory.GeoPointConverterFactory;
 import com.example.accidentsRS.model.GeoLocation;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Objects.nonNull;
 
 @Component
 public class DefaultMapFacade implements MapFacade {
@@ -37,6 +40,14 @@ public class DefaultMapFacade implements MapFacade {
 
     @Autowired
     PathfindingService defaultPathFindingService;
+
+    protected String getNodeId(String externalId) {
+        String nodeId = externalId;
+        if (nonNull(externalId) && externalId.contains("-")) {
+            nodeId = defaultMapService.getAdjacentNodeId(externalId);
+        }
+        return nodeId;
+    }
 
     @Override
     public void addStreet(final DirectionalStreetData directionalStreetData) {
@@ -70,6 +81,8 @@ public class DefaultMapFacade implements MapFacade {
 
     @Override
     public List<Location> suggestPath(final PathSuggestionParameterWrapper pathSuggestionParameter) {
+        pathSuggestionParameter.setStartPointId(getNodeId(pathSuggestionParameter.getStartPointId()));
+        pathSuggestionParameter.setEndPointId(getNodeId(pathSuggestionParameter.getEndPointId()));
         return defaultPathFindingService.findPath(pathSuggestionParameter);
     }
 }

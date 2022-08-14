@@ -1,6 +1,7 @@
 const LayerNames = {
     Accident: "Accident",
-    LocationSuggestion: "LocationSuggestion"
+    LocationSuggestion: "LocationSuggestion",
+    PathViewing: "PathView"
 }
 
 class BaseLayer {
@@ -27,10 +28,11 @@ class BaseLayer {
     }
 
     makePointFeature(featureData, location) {
-        return new ol.Feature({
+        let feature = new ol.Feature({
             attributes: { "data": featureData },
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([location.longitude, location.latitude]))
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([location.longitude, location.latitude])),
         });
+        return feature;
     }
 
     getVectorLayer() {
@@ -128,30 +130,74 @@ class LocationSuggestionLayer extends BaseLayer {
             globalMap.enableLayer(this.LAYER_NAME);
             this.state = this.States.ChoosingBetweenOptions;
             globalMap.centerOnLayer(this.LAYER_NAME);
+            globalPathfinder.showStartPickModal();
         });
     }
 
     handleChoosingBetweenOptions(evt) {
         var feature = globalMap.map.forEachFeatureAtPixel(evt.pixel, function (feature) { return feature; });
         if (feature) {
-            // For when this is implemented
-            //globalPathfinder.setStart(feature['data'].externalId);
+            globalPathfinder.setLocation(feature.j.attributes.data);
         }
         this.state = this.States.Idle;
+        globalMap.disableLayer(LayerNames.LocationSuggestion);
+        pathFindingProcess();
     }
 
     processClick(evt) {
-        if (this.state == this.States.ChoosingInitialLocation) {
+        if (this.state == this.States.ChoosingInitialLocation
+            && !globalPathfinder.isComplete()) {
             this.handleChoosingInitialLocation(evt);
         } else if (this.state == this.States.ChoosingBetweenOptions) {
             this.handleChoosingBetweenOptions(evt);
-        } else if (this.state == this.States.Idle) {
-            // Do nothing
         }
+    }
+
+    reload() {
+        this.state = this.States.ChoosingInitialLocation;
+        super.reload();
+    }
+
+    disable() {
+        this.state = this.States.Idle;
     }
 
     refresh(thenFunction) {
         // noop
+    }
+}
+
+class PathViewingLayer extends BaseLayer {
+    
+    LAYER_NAME = `PathView`;
+    
+    constructor() {
+        super(`PathView`);
+    }
+
+    processClick(evt) {
+        // noop
+    }
+
+    refresh(thenFunction) {
+        getPathBetweenPoints(globalPathfinder.getPoints()).then(points => {
+
+            var projectedPoints = [];
+            for (var i = 0; i < points.length; i++) {
+                if (points[i].longitude && points[i].latitude) {
+                    this.features.push(this.makePointFeature(null, points[i]));
+                    if (i > 0) {
+                        var lineDefinition = [
+                            [ol.proj.fromLonLat([points[i].latitude, points[i].longitude])],
+                            [ol.proj.fromLonLat([points[i-1].latitude, points[i-1].longitude])]
+                        ];
+                        this.features.push(new ol.Feature({ // TODO Lines don't work, openlayers sucks
+                            geometry: new ol.geom.LineString(lineDefinition),
+                        }));
+                    }
+                }
+            }
+        }).then(thenFunction);
     }
 }
 
@@ -163,6 +209,7 @@ class MyMap {
         this.layers = [
             new AccidentsLayer(),
             new LocationSuggestionLayer(),
+            new PathViewingLayer()
         ];
 
         this.map = new ol.Map({

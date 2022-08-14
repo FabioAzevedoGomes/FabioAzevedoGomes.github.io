@@ -9,6 +9,11 @@ public class PersistenceException extends Exception {
     private String message;
     private Throwable reason;
 
+    public PersistenceException(final String message) {
+        super();
+        this.message = message;
+    }
+
     public PersistenceException(final String message, final Throwable reason) {
         super();
         this.message = message;

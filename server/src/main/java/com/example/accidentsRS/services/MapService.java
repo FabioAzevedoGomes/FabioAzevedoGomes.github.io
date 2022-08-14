@@ -13,4 +13,5 @@ public interface MapService {
     void addIntersection(IntersectionModel intersectionModel);
     ExtendedIntersectionModel getIntersectionDescription(String externalId);
     List<GeoLocation> findNearestPoints(Point point, int maxMatches);
+    String getAdjacentNodeId(String streetId);
 }

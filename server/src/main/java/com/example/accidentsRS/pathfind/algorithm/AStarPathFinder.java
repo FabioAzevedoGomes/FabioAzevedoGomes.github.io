@@ -8,10 +8,15 @@ import org.springframework.util.CollectionUtils;
 
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static java.util.Objects.nonNull;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class AStarPathFinder extends AbstractPathFinder {
+
+    private static final Logger LOGGER = Logger.getLogger(AStarPathFinder.class.getName());
 
     private PriorityQueue<String> openSet;
     private HashMap<String, String> cameFrom;
@@ -68,6 +73,11 @@ public class AStarPathFinder extends AbstractPathFinder {
 
     @Override
     public List<Location> getPathBetween(final String startNode, final String endNode) throws NoSuchPathException {
+        if (isEmpty(startNode) || isEmpty(endNode)) {
+            LOGGER.log(Level.SEVERE, "Empty start or end node!");
+            throw new NoSuchPathException("Start or end node are empty!");
+        }
+
         initializeAlgorithm(startNode, endNode);
 
         while (!CollectionUtils.isEmpty(openSet)) {
@@ -90,6 +100,7 @@ public class AStarPathFinder extends AbstractPathFinder {
                 }
             }
         }
-        throw new NoSuchPathException();
+        LOGGER.log(Level.SEVERE, "Path not found!");
+        throw new NoSuchPathException("Could not find a path");
     }
 }

@@ -8,9 +8,9 @@ DATE_URL = SERVER_ENDPOINT + "accidents/get/dates"
 BBOX_URL = SERVER_ENDPOINT + "map/get/bbox"
 ACCIDNETS_QUERY_URL = SERVER_ENDPOINT + "accidents/get"
 WEATHER_QUERY_URL = SERVER_ENDPOINT + "climate/get"
+SAVE_MODEL_URL = SERVER_ENDPOINT + "prediction/model/persist"
 
-
-def get_bounding_box() ->  Dict[str, Dict[str, float]]:
+def get_bounding_box() -> Dict[str, Dict[str, float]]:
     try:
         resp = requests.get(BBOX_URL)
     except requests.exceptions.ConnectionError:
@@ -62,3 +62,14 @@ def get_weather_for_date(date: str) -> List[dict]:
         raise RuntimeError(f'Server refused connection')
 
     return resp.json()
+
+
+def save_predictive_model(model_version: str, model_json: str):
+    try:
+        resp = requests.post(
+            url=SAVE_MODEL_URL,
+            json={"version": model_version, "modelJson": model_json},
+            headers={'Content-Type': 'application/json'}
+        )
+    except requests.exceptions.ConnectionError:
+        raise RuntimeError(f'Server refused connection')

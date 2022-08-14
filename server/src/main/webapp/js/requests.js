@@ -134,3 +134,22 @@ function getPointSuggestions(longitude, latitude) {
         }
     });
 }
+
+function preparePointsForPathfind(points) {
+    outPoints = {};
+    outPoints["startPointId"] = points[0]['externalId']
+    outPoints["endPointId"] = points[1]['externalId']
+    outPoints["considerAccidentPredictions"] = true
+    return JSON.stringify(outPoints);
+}
+
+function getPathBetweenPoints(points) {
+    return $.ajax('/map/path/suggest', {
+        contentType: 'application/json',
+        type: 'POST',
+        data: preparePointsForPathfind(points),
+        error: function (result) {
+            alert('Error predicting path from backend');
+        }
+    });
+}

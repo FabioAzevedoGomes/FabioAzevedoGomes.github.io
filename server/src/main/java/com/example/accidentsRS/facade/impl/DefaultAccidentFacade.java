@@ -36,10 +36,10 @@ public class DefaultAccidentFacade implements AccidentFacade {
     FilterConverter defaultFilterConverter;
 
     @Override
-    public void createAccidentRecord(AccidentData inputClimateData) throws PersistenceException {
+    public void createAccidentRecord(AccidentData inputAccidentData) throws PersistenceException {
         try {
             defaultAccidentService.createAccidentRecord(
-                    defaultAccidentConverter.convert(inputClimateData)
+                    defaultAccidentConverter.convert(inputAccidentData)
             );
         } catch (final ConversionException conversionException) {
             LOGGER.log(Level.SEVERE, "Error converting accident data, object was not persisted!", conversionException);

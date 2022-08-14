@@ -5,6 +5,7 @@ import com.example.accidentsRS.model.GeoLocation;
 import com.example.accidentsRS.model.ExtendedIntersectionModel;
 import com.example.accidentsRS.model.IntersectionModel;
 import com.example.accidentsRS.services.MapService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static java.util.Objects.nonNull;
 
 @Component
 public class DefaultMapService implements MapService {
@@ -114,5 +117,19 @@ public class DefaultMapService implements MapService {
         geoLocationList.addAll(mongoOperations.find(closestQuery, IntersectionModel.class));
 
         return removeDuplicates(geoLocationList);
+    }
+
+    @Override
+    public String getAdjacentNodeId(final String streetId) {
+        final DirectionalStreetModel street = mongoOperations.findOne(
+                Query.query(Criteria.where("directionalId").is(streetId)),
+                DirectionalStreetModel.class
+        );
+
+        if (nonNull(street)) {
+            return street.getSourceIntersectionId();
+        }
+
+        return StringUtils.EMPTY;
     }
 }
