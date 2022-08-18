@@ -305,7 +305,7 @@
 .matching-accidents-tooltip {
   color: #919191;
   display:  none;
-  white-space: pre-wrap;
+  white-space: -moz-pre-space;
 }
 
 .map {

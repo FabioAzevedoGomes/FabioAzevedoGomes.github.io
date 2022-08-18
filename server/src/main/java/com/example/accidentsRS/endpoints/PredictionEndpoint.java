@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "/prediction")
-public class PredictionEndpoint extends AbstractEndpoint {
+public class PredictionEndpoint {
 
     private static final Logger LOGGER = Logger.getLogger(PredictionEndpoint.class.getName());
 

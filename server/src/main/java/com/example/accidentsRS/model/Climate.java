@@ -2,10 +2,15 @@ package com.example.accidentsRS.model;
 
 public class Climate {
 
+    public static final String VISIBILITY = "visibility";
     private Float visibility;
+    public static final String RELATIVE_HUMIDITY_PERCENTAGE = "relative_humidity_percentage";
     private Float relative_humidity_percentage;
+    public static final String PRECIPITATION_MM = "precipitation_mm";
     private Float precipitation_mm;
+    public static final String WIND_SPEED_MS = "wind_speed_ms";
     private Float wind_speed_ms;
+    public static final String AIR_TEMP_CELSIUS = "air_temp_celsius";
     private Float air_temp_celsius;
 
     public Climate(Float visibility, Float relative_humidity_percentage, Float precipitation_mm, Float wind_speed_ms, Float air_temp_celsius) {

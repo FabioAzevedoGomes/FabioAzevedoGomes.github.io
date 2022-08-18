@@ -4,7 +4,6 @@ import com.example.accidentsRS.dao.MapDao;
 import com.example.accidentsRS.model.DirectionalStreetModel;
 import com.example.accidentsRS.model.GeoLocation;
 import com.example.accidentsRS.model.IntersectionModel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +30,16 @@ public class DefaultMapDao implements MapDao {
     @Override
     public IntersectionModel getIntersection(final String externalId) {
         return mongoOperations.findOne(
-                Query.query(Criteria.where("externalId").is(externalId)), IntersectionModel.class
+                Query.query(Criteria.where(IntersectionModel.EXTERNAL_ID).is(externalId)),
+                IntersectionModel.class
         );
     }
 
     @Override
     public DirectionalStreetModel getStreet(final String directionalId) {
         return mongoOperations.findOne(
-                Query.query(Criteria.where("directionalId").is(directionalId)), DirectionalStreetModel.class
+                Query.query(Criteria.where(DirectionalStreetModel.DIRECTIONAL_ID).is(directionalId)),
+                DirectionalStreetModel.class
         );
 
     }
@@ -46,7 +47,8 @@ public class DefaultMapDao implements MapDao {
     @Override
     public List<IntersectionModel> getIntersections(final List<String> externalIds) {
         return mongoOperations.find(
-                Query.query(Criteria.where("externalId").in(externalIds)), IntersectionModel.class
+                Query.query(Criteria.where(IntersectionModel.EXTERNAL_ID).in(externalIds)),
+                IntersectionModel.class
         );
 
     }
@@ -54,17 +56,18 @@ public class DefaultMapDao implements MapDao {
     @Override
     public List<DirectionalStreetModel> getStreets(final List<String> directionalIds) {
         return mongoOperations.find(
-                Query.query(Criteria.where("directionalId").in(directionalIds)), DirectionalStreetModel.class
+                Query.query(Criteria.where(DirectionalStreetModel.DIRECTIONAL_ID).in(directionalIds)),
+                DirectionalStreetModel.class
         );
     }
 
     @Override
-    public Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAroundIntersection(String externalId, float radiusKilometers) {
+    public Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAroundIntersection(final String externalId, float radiusKilometers) {
         return getCircleAround(getIntersection(externalId), radiusKilometers);
     }
 
     @Override
-    public Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAroundStreet(String directionalId, float radiusKilometers) {
+    public Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAroundStreet(final String directionalId, float radiusKilometers) {
         return getCircleAround(getStreet(directionalId), radiusKilometers);
     }
 
@@ -86,8 +89,14 @@ public class DefaultMapDao implements MapDao {
                 new Distance(radiusKilometers, Metrics.KILOMETERS)
         );
         return Pair.of(
-                mongoOperations.find(Query.query(Criteria.where("location").withinSphere(shape)), IntersectionModel.class),
-                mongoOperations.find(Query.query(Criteria.where("location").withinSphere(shape)), DirectionalStreetModel.class)
+                mongoOperations.find(
+                        Query.query(Criteria.where(IntersectionModel.LOCATION).withinSphere(shape)),
+                        IntersectionModel.class
+                ),
+                mongoOperations.find(
+                        Query.query(Criteria.where(DirectionalStreetModel.LOCATION).withinSphere(shape)),
+                        DirectionalStreetModel.class
+                )
         );
     }
 

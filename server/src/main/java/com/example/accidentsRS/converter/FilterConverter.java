@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface FilterConverter {
     FilterWrapperModel convert(FilterWrapperData filterWrapperData);
-
     List<FilterWrapperModel> convertAll(List<FilterWrapperData> filterWrapperDataList);
 }

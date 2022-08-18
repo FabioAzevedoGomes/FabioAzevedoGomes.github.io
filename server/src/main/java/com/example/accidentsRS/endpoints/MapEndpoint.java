@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "/map")
-public class MapEndpoint extends AbstractEndpoint {
+public class MapEndpoint {
 
     private static final Logger LOGGER = Logger.getLogger(MapEndpoint.class.getName());
 

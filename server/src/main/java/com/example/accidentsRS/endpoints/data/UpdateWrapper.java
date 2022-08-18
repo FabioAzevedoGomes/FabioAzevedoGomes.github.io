@@ -1,25 +1,35 @@
 package com.example.accidentsRS.endpoints.data;
 
-import java.util.Map;
+import com.example.accidentsRS.data.FilterWrapperData;
+import com.example.accidentsRS.data.UpdateData;
+
+import java.util.List;
 
 public class UpdateWrapper {
+    private List<FilterWrapperData> filters;
+    private List<UpdateData> updates;
 
-    private Map<String, Object> filters;
-    private Map<String, Object> values;
+    public UpdateWrapper() {
+    }
 
-    public Map<String, Object> getFilters() {
+    public UpdateWrapper(final List<FilterWrapperData> filters, final List<UpdateData> updates) {
+        this.filters = filters;
+        this.updates = updates;
+    }
+
+    public List<FilterWrapperData> getFilters() {
         return filters;
     }
 
-    public void setFilters(Map<String, Object> filters) {
+    public void setFilters(final List<FilterWrapperData> filters) {
         this.filters = filters;
     }
 
-    public Map<String, Object> getValues() {
-        return values;
+    public List<UpdateData> getUpdates() {
+        return updates;
     }
 
-    public void setValues(Map<String, Object> values) {
-        this.values = values;
+    public void setUpdates(final List<UpdateData> updates) {
+        this.updates = updates;
     }
 }

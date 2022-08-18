@@ -6,16 +6,23 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
 @Document(collection = "accidents")
-public class AccidentModel {
+public class AccidentModel extends PersistedModel {
 
     @Id
     private String id;
+    public static final String EXTERNAL_ID = "externalId";
     private String externalId;
+    public static final String ADDRESS = "address";
     private Address address;
+    public static final String DATE = "date";
     private Date date;
+    public static final String FATALITY = "fatality";
     private Fatality fatality;
+    public static final String INVOLVED_ENTITIES = "involvedEntities";
     private List<String> involvedEntities;
+    public static final String TYPE = "type";
     private String type;
+    public static final String CLIMATE = "climate";
     private Climate climate;
 
     public String getId() {

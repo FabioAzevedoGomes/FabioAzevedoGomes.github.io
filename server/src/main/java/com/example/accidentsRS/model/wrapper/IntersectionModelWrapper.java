@@ -4,6 +4,7 @@ import com.example.accidentsRS.model.IntersectionModel;
 
 public class IntersectionModelWrapper {
 
+    public static final String DATA = "data";
     private IntersectionModel data;
 
     public IntersectionModel getData() {

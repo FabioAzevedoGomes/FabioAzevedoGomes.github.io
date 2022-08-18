@@ -6,12 +6,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "streets")
 public class DirectionalStreetModel extends GeoLocation {
 
+    public static final String COLLECTION_NAME = "streets";
     @Id
     private String id;
+    public static final String DIRECTIONAL_ID = "directionalId";
     private String directionalId;
+    public static final String NAME = "name";
     private String name;
+    public static final String LENGTH = "length";
     private Float length;
+    public static final String SOURCE_INTERSECTION_ID = "sourceIntersectionId";
     private String sourceIntersectionId;
+    public static final String DESTINATION_INTERSECTION_ID = "destinationIntersectionId";
     private String destinationIntersectionId;
 
     public String getId() {

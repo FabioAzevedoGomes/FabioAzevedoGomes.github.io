@@ -4,11 +4,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Date {
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone="GMT-3")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "GMT-3")
+    public static final String DATE = "date";
     private java.util.Date date;
+    public static final String WEEKDAY = "weekday";
     private Integer weekday;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone="GMT-3")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "GMT-3")
+    public static final String HOUR = "hour";
     private java.util.Date hour;
+    public static final String TIME_OF_DAY = "time_of_day";
     private Long time_of_day;
 
     public java.util.Date getDate() {

@@ -8,6 +8,15 @@ public final class FilterWrapperModel {
     private OperationEnum operation;
     private Object value;
 
+    public FilterWrapperModel() {
+    }
+
+    public FilterWrapperModel(final List<String> fields, final OperationEnum operation, final Object value) {
+        this.fields = fields;
+        this.operation = operation;
+        this.value = value;
+    }
+
     public List<String> getFields() {
         return fields;
     }
@@ -30,5 +39,9 @@ public final class FilterWrapperModel {
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    public String toString() {
+        return String.format("%s %s %s", fields.toString(), operation.label, value);
     }
 }

@@ -1,27 +1,119 @@
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/model/Date.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/data/TimeOfDayData.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/data/SearchInputForm.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/model/Address.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/model/Entity.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/services/ValueSearchService.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/model/Location.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/services/data/TimeSearchParameters.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/services/data/AreaSearchParameters.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/data/AccidentInput.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/data/VehicleData.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/model/Accident.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/services/data/DateSearchParameters.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/services/data/FatalityDataWrapper.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/controllers/ValidationResources.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/data/WeekdayData.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/services/AccidentQuery.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/services/AccidentSearchService.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/AccidentsRsApplication.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/data/StreetData.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/controllers/DataController.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/controllers/HomePageController.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/model/Fatality.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/data/AccidentData.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/controllers/AccidentResources.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/services/data/FatalitySearchParameters.java
-/home/user/Área de Trabalho/TCC/AccidentsRS/src/main/java/com/example/accidentsRS/data/FatalityData.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/endpoints/AccidentEndpoint.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/facade/impl/DefaultMapFacade.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/impl/IntersectionGeoPointReverseConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/endpoints/AbstractEndpoint.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/impl/DefaultAccidentConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/impl/DefaultAccidentDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/GenericDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/PredictionService.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/filter/OperationEnum.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/impl/DefaultPredictionService.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/factory/PathfinderFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/update/UpdateModel.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/exceptions/PersistenceException.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/graph/AbstractGraph.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/impl/DefaultIntersectionDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/AccidentsRsApplication.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/AccidentModel.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/ClimateService.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/AccidentDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/ClimateModel.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/graph/Graph.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/impl/DefaultUpdateConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/data/AccidentData.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/graph/inmemory/CompleteHashGraph.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/data/UpdateData.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/exceptions/NoSuchPathException.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/graph/Edge.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/facade/AccidentFacade.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/factory/impl/DefaultMongoUpdateFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/impl/DefaultClimateConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/impl/DefaultClimateReverseConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/PredictiveModelDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/data/PathSuggestionParameterWrapper.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/endpoints/data/UpdateWrapper.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/graph/database/DatabaseGraph.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/Climate.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/controllers/HomePageController.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/endpoints/PredictionEndpoint.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/data/IntersectionData.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/factory/MongoQueryFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/PathFinder.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/impl/DefaultAccidentService.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/PathfindingService.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/filter/FilterWrapperModel.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/factory/UpdateFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/AccidentService.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/prediction/DefaultPredictor.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/Date.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/facade/MapFacade.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/prediction/Predictor.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/factory/GraphFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/endpoints/MapEndpoint.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/IntersectionDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/algorithm/AStarPathFinder.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/MapService.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/factory/impl/DefaultPathfinderFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/FilterConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/AccidentConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/data/DirectionalStreetData.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/util/MapUtils.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/UpdateConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/impl/DefaultDirectionalStreetConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/AccidentReverseConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/facade/PredictionFacade.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/graph/inmemory/ChunkedHashGraph.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/impl/DefaultClimateDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/impl/StreetGeoPointReverseConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/Location.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/algorithm/AbstractPathFinder.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/exceptions/ValidationException.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/MapDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/PersistedModel.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/factory/impl/DefaultGraphFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/DirectionalStreetModel.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/DirectionalStreetConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/factory/impl/DefaultMongoQueryFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/IntersectionConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/impl/DefaultMapService.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/facade/ClimateFacade.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/PredictiveModel.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/factory/impl/DefaultFilterFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/StreetDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/impl/DefaultIntersectionConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/factory/impl/DefaultUpdateFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/impl/AbstractDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/endpoints/ClimateEndpoint.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/factory/MongoUpdateFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/data/GeoPointData.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/IntersectionModel.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/Fatality.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/impl/DefaultFilterConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/graph/inmemory/AbstractInMemoryGraph.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/impl/DefaultPathFindingService.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/impl/DefaultPredictiveModelDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/factory/FilterFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/pathfind/graph/Node.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/facade/factory/GeoPointConverterFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/ClimateReverseConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/facade/impl/DefaultAccidentFacade.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/impl/DefaultAccidentReverseConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/data/ClimateData.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/facade/impl/DefaultPredictionFacade.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/Address.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/GeoPointReverseConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/ExtendedIntersectionModel.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/wrapper/IntersectionModelWrapper.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/facade/factory/impl/DefaultGeoPointConverterFactory.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/impl/DefaultStreetDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/impl/DefaultMapDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/facade/impl/DefaultClimateFacade.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/ClimateConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/converter/impl/BaseGeoPointReverseConverter.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/GeoLocation.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/ValueSearchService.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/dao/ClimateDao.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/impl/DefaultClimateService.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/model/update/UpdateTypeEnum.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/services/impl/DefaultValueSearchService.java
+/home/user/Projects/TCC_Project/server/src/main/java/com/example/accidentsRS/data/FilterWrapperData.java

@@ -191,9 +191,9 @@ class PathViewingLayer extends BaseLayer {
                             [ol.proj.fromLonLat([points[i].latitude, points[i].longitude])],
                             [ol.proj.fromLonLat([points[i-1].latitude, points[i-1].longitude])]
                         ];
-                        this.features.push(new ol.Feature({ // TODO Lines don't work, openlayers sucks
-                            geometry: new ol.geom.LineString(lineDefinition),
-                        }));
+                        // this.features.push(new ol.Feature({ // TODO Lines don't work, openlayers sucks
+                        //     geometry: new ol.geom.LineString(lineDefinition),
+                        // }));
                     }
                 }
             }

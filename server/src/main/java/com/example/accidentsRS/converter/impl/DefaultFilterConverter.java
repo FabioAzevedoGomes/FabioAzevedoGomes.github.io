@@ -8,8 +8,13 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
+
+import static java.util.Objects.nonNull;
 
 @Component
 public class DefaultFilterConverter implements FilterConverter {
@@ -48,10 +53,12 @@ public class DefaultFilterConverter implements FilterConverter {
     }
 
     @Override
-    public List<FilterWrapperModel> convertAll(List<FilterWrapperData> filterWrapperDataList) {
+    public List<FilterWrapperModel> convertAll(final List<FilterWrapperData> filterWrapperDataList) {
         List<FilterWrapperModel> filterWrapperModelList = new ArrayList<>();
-        for (FilterWrapperData filterWrapperData : filterWrapperDataList) {
-            filterWrapperModelList.add(convert(filterWrapperData));
+        if (nonNull(filterWrapperDataList)) {
+            for (FilterWrapperData filterWrapperData : filterWrapperDataList) {
+                filterWrapperModelList.add(convert(filterWrapperData));
+            }
         }
         return filterWrapperModelList;
     }

@@ -7,13 +7,15 @@ public enum OperationEnum {
     DOES_NOT_HAVE("DOES_NOT_HAVE"),
     EQUALS("EQUALS"),
     GREATER_OR_EQUAL("GREATER_OR_EQUAL"),
+    GREATER_THAN("GREATER_THAN"),
+    LESS_THAN("LESS_THAN"),
     LESS_OR_EQUAL("LESS_OR_EQUAL"),
     BEFORE("BEFORE"),
     AFTER("AFTER");
 
     public final String label;
 
-    private OperationEnum(final String label) {
+    OperationEnum(final String label) {
         this.label = label;
     }
 }

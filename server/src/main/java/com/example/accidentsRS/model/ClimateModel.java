@@ -4,16 +4,23 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "climate")
-public class ClimateModel {
+public class ClimateModel extends PersistedModel {
 
     @Id
     private String id;
+    public static final String DATE_TIME = "dateTime";
     private Date dateTime;
+    public static final String VISIBILITY = "visibility";
     private Float visibility;
+    public static final String RELATIVE_HUMIDITY_PERCENTAGE = "relativeHumidityPercentage";
     private Float relativeHumidityPercentage;
+    public static final String PRECIPITATION_MM = "precipitationMm";
     private Float precipitationMm;
+    public static final String WIND_SPEED_MS = "windSpeedMs";
     private Float windSpeedMs;
+    public static final String AIR_TEMP_CELSIUS = "airTempCelsius";
     private Float airTempCelsius;
+    public static final String LOCATION = "location";
     private Location location;
 
     public String getId() {

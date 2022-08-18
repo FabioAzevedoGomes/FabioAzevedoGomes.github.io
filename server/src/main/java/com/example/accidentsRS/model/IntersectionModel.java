@@ -10,8 +10,11 @@ public class IntersectionModel extends GeoLocation {
 
     @Id
     private String id;
+    public static final String CONNECTED_STREET_IDS = "connectedStreetIds";
     private List<String> connectedStreetIds;
+    public static final String INCOMING_STREET_IDS = "incomingStreetIds";
     private List<String> incomingStreetIds;
+    public static final String OUTGOING_STREET_IDS = "outgoingStreetIds";
     private List<String> outgoingStreetIds;
 
     public String getId() {

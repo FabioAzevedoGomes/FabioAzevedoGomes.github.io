@@ -2,8 +2,11 @@ package com.example.accidentsRS.model;
 
 public class Fatality {
 
+    public static final String DEATHS = "deaths";
     private int deaths;
+    public static final String LIGHT_INJURIES = "light_injuries";
     private int light_injuries;
+    public static final String SERIOUS_INJURIES = "serious_injuries";
     private int serious_injuries;
 
     public int getDeaths() {

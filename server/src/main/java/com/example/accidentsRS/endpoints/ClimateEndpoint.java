@@ -12,16 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
-
-import static java.util.Objects.isNull;
 
 @RestController
 @RequestMapping(value = "/climate")
-public class ClimateEndpoint extends AbstractEndpoint {
+public class ClimateEndpoint {
 
     private static final Logger LOGGER = Logger.getLogger(ClimateEndpoint.class.getName());
 
@@ -34,24 +30,17 @@ public class ClimateEndpoint extends AbstractEndpoint {
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.POST)
-    public List<ClimateData> getSome(@RequestBody(required = false) final List<FilterWrapperData> getFilters) throws ValidationException {
-        if (isNull(getFilters)) {
-            return defaultClimateFacade.findAllMatchingFilter(new ArrayList<>());
-        } else {
-            return defaultClimateFacade.findAllMatchingFilter(getFilters);
-        }
+    public List<ClimateData> get(@RequestBody(required = false) final List<FilterWrapperData> filters) throws ValidationException {
+        return defaultClimateFacade.findAllMatchingFilter(filters);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public void updateSome(@RequestBody final UpdateWrapper updateWrapper) throws ValidationException {
-        defaultClimateFacade.updateAllMatchingFilter(
-                updateWrapper.getFilters(),
-                updateWrapper.getValues()
-        );
+    public void update(@RequestBody final UpdateWrapper updateWrapper) throws ValidationException {
+        defaultClimateFacade.updateAllMatchingFilter(updateWrapper);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public void deleteSome(@RequestBody final Map<String, Object> deleteFilters) throws ValidationException {
-        defaultClimateFacade.deleteAllMatchingFilter(deleteFilters);
+    public void delete(@RequestBody final List<FilterWrapperData> filters) throws ValidationException {
+        defaultClimateFacade.deleteAllMatchingFilter(filters);
     }
 }

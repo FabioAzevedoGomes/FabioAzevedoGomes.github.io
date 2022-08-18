@@ -1,6 +1,5 @@
 package com.example.accidentsRS.controllers;
 
-import com.example.accidentsRS.services.impl.DefaultAccidentService;
 import com.example.accidentsRS.services.impl.DefaultValueSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +13,6 @@ import java.util.logging.Logger;
 public class HomePageController {
 
     private static final Logger LOG = Logger.getLogger(HomePageController.class.toString());
-
-    @Autowired
-    DefaultAccidentService accidentSearchService;
 
     @Autowired
     DefaultValueSearchService defaultValueSearchService;

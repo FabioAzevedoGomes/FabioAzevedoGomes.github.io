@@ -49,25 +49,5 @@
         </div>
       </div>
     </form>
-
-    <!-- Search bar-->
-    <form class="form-inline my-3 my-lg-0">
-      <div class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-          I'm looking for <span id="lookingForText">...</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#" onclick="updateSearchText('a street')">A street</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" onclick="updateSearchText('an accident with id')">An accident by id</a>
-          <a class="dropdown-item" href="#" onclick="updateSearchText('accidents with severity')">An accident by
-            severity</a>
-        </div>
-      </div>
-      <input class="form-control mr-sm-3" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-3 my-sm-0" type="submit" id="search-button">Search</button>
-    </form>
-
   </div>
 </nav>

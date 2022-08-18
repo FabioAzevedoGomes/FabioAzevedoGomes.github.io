@@ -1,7 +1,9 @@
 package com.example.accidentsRS.model;
 
-public abstract class GeoLocation {
+public abstract class GeoLocation extends PersistedModel {
+    public static final String EXTERNAL_ID = "externalId";
     protected String externalId;
+    public static final String LOCATION = "location";
     protected Location location;
 
     public String getExternalId() {

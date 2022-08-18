@@ -1,133 +1,106 @@
 package com.example.accidentsRS.services.impl;
 
+import com.example.accidentsRS.dao.IntersectionDao;
+import com.example.accidentsRS.dao.StreetDao;
+import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.model.DirectionalStreetModel;
-import com.example.accidentsRS.model.GeoLocation;
 import com.example.accidentsRS.model.ExtendedIntersectionModel;
+import com.example.accidentsRS.model.GeoLocation;
 import com.example.accidentsRS.model.IntersectionModel;
 import com.example.accidentsRS.services.MapService;
+import com.example.accidentsRS.services.factory.FilterFactory;
+import com.example.accidentsRS.services.factory.UpdateFactory;
+import com.example.accidentsRS.services.util.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.aggregation.*;
-import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static java.util.Objects.nonNull;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class DefaultMapService implements MapService {
 
+    private static final Logger LOGGER = Logger.getLogger(DefaultMapService.class.getName());
+
     @Autowired
-    MongoOperations mongoOperations;
+    FilterFactory defaultFilterFactory;
 
-    private Query createIntersectionFromUpdateQuery(final DirectionalStreetModel directionalStreetModel) {
-        return Query.query(Criteria.where("externalId").is(directionalStreetModel.getSourceIntersectionId()));
+    @Autowired
+    UpdateFactory defaultUpdateFactory;
+
+    @Autowired
+    StreetDao defaultStreetDao;
+
+    @Autowired
+    IntersectionDao defaultIntersectionDao;
+
+    protected void updateIntersectionAtStartOf(final DirectionalStreetModel directionalStreetModel) throws PersistenceException {
+        Map<String, Object> updateFields = new HashMap<>();
+        updateFields.put(IntersectionModel.OUTGOING_STREET_IDS, directionalStreetModel.getDirectionalId());
+        updateFields.put(IntersectionModel.CONNECTED_STREET_IDS, directionalStreetModel.getDirectionalId());
+        defaultIntersectionDao.update(
+                defaultFilterFactory.createFiltersForFindingIntersectionId(directionalStreetModel.getSourceIntersectionId()),
+                defaultUpdateFactory.createPushUpdatesForFieldValuePairs(updateFields)
+        );
     }
 
-    private Query createIntersectionToUpdateQuery(final DirectionalStreetModel directionalStreetModel) {
-        return Query.query(Criteria.where("externalId").is(directionalStreetModel.getDestinationIntersectionId()));
-    }
-
-    private Update createIntersectionFromUpdateObject(final DirectionalStreetModel directionalStreetModel) {
-        final Update update = new Update();
-        update.push("outgoingStreetIds", directionalStreetModel.getDirectionalId());
-        update.push("connectedStreetIds", directionalStreetModel.getDirectionalId());
-        return update;
-    }
-
-    private Update createIntersectionToUpdateObject(final DirectionalStreetModel directionalStreetModel) {
-        final Update update = new Update();
-        update.push("incomingStreetIds", directionalStreetModel.getDirectionalId());
-        update.push("connectedStreetIds", directionalStreetModel.getDirectionalId());
-        return update;
+    protected void updateIntersectionAtEndOf(final DirectionalStreetModel directionalStreetModel) throws PersistenceException {
+        Map<String, Object> updateFields = new HashMap<>();
+        updateFields.put(IntersectionModel.INCOMING_STREET_IDS, directionalStreetModel.getDirectionalId());
+        updateFields.put(IntersectionModel.CONNECTED_STREET_IDS, directionalStreetModel.getDirectionalId());
+        defaultIntersectionDao.update(
+                defaultFilterFactory.createFiltersForFindingIntersectionId(directionalStreetModel.getSourceIntersectionId()),
+                defaultUpdateFactory.createPushUpdatesForFieldValuePairs(updateFields)
+        );
     }
 
     @Override
     public void addStreet(final DirectionalStreetModel directionalStreetModel) {
-        mongoOperations.save(directionalStreetModel);
-        mongoOperations.updateMulti(
-                createIntersectionFromUpdateQuery(directionalStreetModel),
-                createIntersectionFromUpdateObject(directionalStreetModel),
-                IntersectionModel.class
-        );
-        mongoOperations.updateMulti(
-                createIntersectionToUpdateQuery(directionalStreetModel),
-                createIntersectionToUpdateObject(directionalStreetModel),
-                IntersectionModel.class
-        );
+        try {
+            defaultStreetDao.save(directionalStreetModel);
+            updateIntersectionAtStartOf(directionalStreetModel);
+            updateIntersectionAtEndOf(directionalStreetModel);
+        } catch (final PersistenceException e) {
+            LOGGER.log(Level.WARNING, e.getMessage());
+        }
     }
 
     @Override
     public void addIntersection(final IntersectionModel intersectionModel) {
-        mongoOperations.save(intersectionModel);
+        try {
+            defaultIntersectionDao.save(intersectionModel);
+        } catch (final PersistenceException e) {
+            LOGGER.log(Level.WARNING, e.getMessage());
+        }
     }
 
     @Override
     public ExtendedIntersectionModel getIntersectionDescription(final String externalId) {
-        // NOTE: $geoNear and $near are not allowed inside aggregation queries, so we need to do this separately
-        final Aggregation aggregationQuery = Aggregation.newAggregation(
-                new MatchOperation(Criteria.where("externalId").is(externalId)),
-                LookupOperation.newLookup()
-                        .from("streets")
-                        .localField("connectedStreetIds")
-                        .foreignField("directionalId")
-                        .as("connectedStreets")
-        );
-        return mongoOperations.aggregate(
-                aggregationQuery,
-                IntersectionModel.class,
-                ExtendedIntersectionModel.class
-        ).getMappedResults().get(0);
-    }
-
-    protected List<GeoLocation> removeDuplicates(List<GeoLocation> geoLocationList) {
-        final List<GeoLocation> resultList = new ArrayList<>();
-        final Set<String> seenNames = new HashSet<>();
-        final Set<String> seenIds = new HashSet<>();
-        geoLocationList.forEach(geoLocation -> {
-            if (!seenIds.contains(geoLocation.getExternalId())
-                    && (
-                    !(geoLocation instanceof DirectionalStreetModel)
-                            || !seenNames.contains(((DirectionalStreetModel) geoLocation).getName()))
-            ) {
-                seenIds.add(geoLocation.getExternalId());
-                resultList.add(geoLocation);
-                if (geoLocation instanceof DirectionalStreetModel) {
-                    seenNames.add(((DirectionalStreetModel) geoLocation).getName());
-                }
-            }
-        });
-        return resultList;
+        return defaultIntersectionDao.getIntersectionDescription(externalId);
     }
 
     @Override
     public List<GeoLocation> findNearestPoints(final Point location, int maxMatches) {
         final List<GeoLocation> geoLocationList = new ArrayList<>();
-        final Query closestQuery = Query.query(
-                Criteria.where("location").near(location)
-        ).limit(2 * maxMatches);
-
-        geoLocationList.addAll(mongoOperations.find(closestQuery, DirectionalStreetModel.class));
-        geoLocationList.addAll(mongoOperations.find(closestQuery, IntersectionModel.class));
-
-        return removeDuplicates(geoLocationList);
+        geoLocationList.addAll(defaultStreetDao.getNearbyStreets(location, maxMatches));
+        geoLocationList.addAll(defaultIntersectionDao.getNearbyIntersections(location, maxMatches));
+        return MapUtils.removeDuplicateLocations(geoLocationList);
     }
 
     @Override
     public String getAdjacentNodeId(final String streetId) {
-        final DirectionalStreetModel street = mongoOperations.findOne(
-                Query.query(Criteria.where("directionalId").is(streetId)),
-                DirectionalStreetModel.class
+        final List<DirectionalStreetModel> street = defaultStreetDao.get(
+                defaultFilterFactory.createFilterForFieldValuePairs(
+                        Collections.singletonMap(DirectionalStreetModel.DIRECTIONAL_ID, streetId)
+                )
         );
 
-        if (nonNull(street)) {
-            return street.getSourceIntersectionId();
+        if (!CollectionUtils.isEmpty(street)) {
+            return street.get(0).getSourceIntersectionId();
         }
 
         return StringUtils.EMPTY;

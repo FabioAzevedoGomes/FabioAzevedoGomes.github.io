@@ -4,7 +4,9 @@ import org.springframework.data.geo.Point;
 
 public class Location {
 
+    public static final String LONGITUDE = "longitude";
     private Float longitude;
+    public static final String LATITUDE = "latitude";
     private Float latitude;
 
     public Location(Float longitude, Float latitude) {

@@ -1,8 +1,4 @@
 function initializeAll() {
-    document.getElementById('search-button').addEventListener("click", function(event){
-        event.preventDefault()
-    });
-
     document.getElementById('accident-filters-list').addEventListener("click", function(event){
         event.preventDefault()
     });

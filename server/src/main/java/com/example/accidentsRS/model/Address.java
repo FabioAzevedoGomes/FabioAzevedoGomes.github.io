@@ -2,9 +2,13 @@ package com.example.accidentsRS.model;
 
 public class Address {
 
+    public static final String STREET1 = "street1";
     private String street1;
+    public static final String STREET2 = "street2";
     private String street2;
+    public static final String REGION = "region";
     private String region;
+    public static final String LOCATION = "location";
     private Location location;
 
     public String getStreet1() {

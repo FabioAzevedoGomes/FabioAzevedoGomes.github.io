@@ -1,22 +1,24 @@
 package com.example.accidentsRS.endpoints;
 
+import com.example.accidentsRS.data.AccidentData;
 import com.example.accidentsRS.data.FilterWrapperData;
+import com.example.accidentsRS.endpoints.data.UpdateWrapper;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.exceptions.ValidationException;
 import com.example.accidentsRS.facade.AccidentFacade;
-import com.example.accidentsRS.data.AccidentData;
 import com.example.accidentsRS.services.impl.DefaultValueSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "/accidents")
-public class AccidentEndpoint extends AbstractEndpoint {
+public class AccidentEndpoint {
 
     private static final Logger LOGGER = Logger.getLogger(AccidentEndpoint.class.getName());
 
@@ -31,16 +33,20 @@ public class AccidentEndpoint extends AbstractEndpoint {
         defaultAccidentFacade.createAccidentRecord(accidentData);
     }
 
-    @RequestMapping(value = "/get", method = RequestMethod.POST) // Using post here to support the filters
-    public List<AccidentData> getSome(@RequestBody(required = false) final List<FilterWrapperData> getFilters) throws ValidationException {
-        if (Objects.isNull(getFilters)) {
-            return defaultAccidentFacade.findAllMatchingFilter(new ArrayList<>());
-        } else {
-            return defaultAccidentFacade.findAllMatchingFilter(getFilters);
-        }
+    @RequestMapping(value = "/get", method = RequestMethod.POST)
+    public List<AccidentData> get(@RequestBody(required = false) final List<FilterWrapperData> filters) throws ValidationException {
+        return defaultAccidentFacade.findAllMatchingFilter(filters);
     }
 
-    // TODO UPDATE + DELETE endpoints
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public void update(@RequestBody final UpdateWrapper updateWrapper) throws ValidationException {
+        defaultAccidentFacade.updateAllMatchingFilter(updateWrapper);
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    public void delete(@RequestBody final List<FilterWrapperData> filters) throws ValidationException {
+        defaultAccidentFacade.deleteAllMatchingFilter(filters);
+    }
 
     @RequestMapping(value = "/get/types", method = RequestMethod.GET)
     public List<String> getTypes() {
