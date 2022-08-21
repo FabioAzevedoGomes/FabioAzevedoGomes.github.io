@@ -57,7 +57,7 @@ public class DefaultPredictionService implements PredictionService {
             return defaultPredictor.predictRiskForDateAndPlace(date, place);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error predicting risk for date " + date + " and place " + place, e);
-            return 0.0f;
+            return 1.0f;
         }
     }
 }

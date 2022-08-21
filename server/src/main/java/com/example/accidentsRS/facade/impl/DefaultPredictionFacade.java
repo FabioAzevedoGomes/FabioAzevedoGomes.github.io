@@ -1,5 +1,6 @@
 package com.example.accidentsRS.facade.impl;
 
+import com.example.accidentsRS.model.Location;
 import com.example.accidentsRS.model.PredictiveModel;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.facade.PredictionFacade;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,5 +43,11 @@ public class DefaultPredictionFacade implements PredictionFacade {
     @Override
     public Binary getPredictiveModel(final String modelName) {
         return defaultPredictionService.getPredictionModel(modelName).getModel();
+    }
+
+    @Override
+    public float predict(final Location location) {
+        final java.util.Date today = new java.util.Date();
+        return defaultPredictionService.predict(today, location);
     }
 }

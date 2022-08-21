@@ -2,6 +2,7 @@ package com.example.accidentsRS.endpoints;
 
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.facade.PredictionFacade;
+import com.example.accidentsRS.model.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -39,5 +40,10 @@ public class PredictionEndpoint {
                                 .filename("model.hd5")
                                 .build().toString())
                 .body(resource);
+    }
+
+    @RequestMapping(value = "/model/predict", method = RequestMethod.POST)
+    public float predict(@RequestBody final Location location) {
+        return defaultPredictionFacade.predict(location);
     }
 }
