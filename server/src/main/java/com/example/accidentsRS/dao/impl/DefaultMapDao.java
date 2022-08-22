@@ -4,6 +4,7 @@ import com.example.accidentsRS.dao.MapDao;
 import com.example.accidentsRS.model.DirectionalStreetModel;
 import com.example.accidentsRS.model.GeoLocation;
 import com.example.accidentsRS.model.IntersectionModel;
+import com.example.accidentsRS.model.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,11 @@ public class DefaultMapDao implements MapDao {
     @Override
     public List<DirectionalStreetModel> getAllStreets() {
         return mongoOperations.findAll(DirectionalStreetModel.class);
+    }
+
+    @Override
+    public Location getRegionCenterFor(final Location location) {
+        return null;
     }
 
     protected Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAround(final GeoLocation point, final float radiusKilometers) {

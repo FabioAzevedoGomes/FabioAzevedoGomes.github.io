@@ -4,7 +4,7 @@ import com.example.accidentsRS.dao.AccidentDao;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.model.AccidentModel;
 import com.example.accidentsRS.model.Climate;
-import com.example.accidentsRS.model.Date;
+import com.example.accidentsRS.model.DateTimeModel;
 import com.example.accidentsRS.model.filter.FilterWrapperModel;
 import com.example.accidentsRS.model.update.UpdateModel;
 import com.example.accidentsRS.model.update.UpdateTypeEnum;
@@ -67,7 +67,7 @@ public class DefaultAccidentService implements AccidentService {
     }
 
     @Override
-    public void updateWithClimateData(final Climate climate, final Date dateTime) {
+    public void updateWithClimateData(final Climate climate, final DateTimeModel dateTime) {
         List<UpdateModel> accidentUpdate = new ArrayList<>();
         accidentUpdate.add(new UpdateModel(AccidentModel.CLIMATE, UpdateTypeEnum.SET, climate));
 

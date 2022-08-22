@@ -1,11 +1,11 @@
 package com.example.accidentsRS.data;
 
-import com.example.accidentsRS.model.Date;
+import com.example.accidentsRS.model.DateTimeModel;
 import com.example.accidentsRS.model.Location;
 
 public class ClimateData {
 
-    private Date date_time;
+    private DateTimeModel date_time;
     private Float visibility;
     private Float relative_humidity_percentage;
     private Float precipitation_mm;
@@ -13,11 +13,11 @@ public class ClimateData {
     private Float air_temp_celcius;
     private Location location;
 
-    public Date getDate_time() {
+    public DateTimeModel getDate_time() {
         return date_time;
     }
 
-    public void setDate_time(Date date_time) {
+    public void setDate_time(DateTimeModel date_time) {
         this.date_time = date_time;
     }
 

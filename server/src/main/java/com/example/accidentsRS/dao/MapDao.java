@@ -2,6 +2,7 @@ package com.example.accidentsRS.dao;
 
 import com.example.accidentsRS.model.DirectionalStreetModel;
 import com.example.accidentsRS.model.IntersectionModel;
+import com.example.accidentsRS.model.Location;
 import org.springframework.data.util.Pair;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface MapDao {
     Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getCircleAroundStreet(String directionalId, float radiusKilometers);
     List<IntersectionModel> getAllIntersections();
     List<DirectionalStreetModel> getAllStreets();
+    Location getRegionCenterFor(Location location);
 }

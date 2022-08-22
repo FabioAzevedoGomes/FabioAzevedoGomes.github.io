@@ -4,7 +4,7 @@ import com.example.accidentsRS.dao.AccidentDao;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.model.AccidentModel;
 import com.example.accidentsRS.model.Address;
-import com.example.accidentsRS.model.Date;
+import com.example.accidentsRS.model.DateTimeModel;
 import com.example.accidentsRS.model.Location;
 import com.example.accidentsRS.model.filter.FilterWrapperModel;
 import com.example.accidentsRS.model.update.UpdateModel;
@@ -39,7 +39,7 @@ public class DefaultAccidentDao extends AbstractDao<AccidentModel> implements Ac
     @Override
     public List<java.util.Date> findDistinctDates() {
         return mongoOperations.findDistinct(
-                AccidentModel.DATE + "." + Date.DATE,
+                AccidentModel.DATE + "." + DateTimeModel.DATE,
                 AccidentModel.class,
                 java.util.Date.class
         );

@@ -31,23 +31,34 @@
       <li class="nav-item active">
         <a class="nav-link" href="#" data-toggle="modal" data-target="#pickFirstLocationModal">Suggest a path</a>
       </li>
+      <li class="nav-item inactive">
+        <div class="nav-link matching-accidents-tooltip" id="matching-accidents-tooltip">
+          <span style="display: inline-block;" id="match-quantity">Looking for</span> Matching accidents
+        </div>
+      </li>
     </ul>
 
-    <div class="nav-item inactive">
-      <div class="nav-link matching-accidents-tooltip" id="matching-accidents-tooltip">
-        <span style="display: inline-block;" id="match-quantity">Looking for</span> Matching accidents
-      </div>
-    </div>
-
-    <!-- Show/Hide -->
-    <form class="nav-item">
-      <div class="form-inline">
-        <div class="custom-control custom-switch my-lg-2">
-          <input type="checkbox" class="custom-control-input" id="showHideSwitch"
-            onchange="updateShowOrHideAccidents()">
-          <label id="showHideText" class="custom-control-label" for="showHideSwitch">Hide accidents</label>
+    <div class="navbar-nav">
+      <div class="nav-item active nav-switches">
+        <div class="form-inline">
+          <div class="custom-control custom-switch my-lg-2">
+            <input type="checkbox" class="custom-control-input" id="showHideSwitch"
+              onchange="updateShowOrHideAccidents()">
+            <label id="showHideText" class="custom-control-label" for="showHideSwitch">Hide accidents</label>
+          </div>
         </div>
       </div>
-    </form>
+
+      <!-- Show/Hide Risk -->
+      <div class="nav-item active nav-switches">
+        <div class="form-inline">
+          <div class="custom-control custom-switch my-lg-2">
+            <input type="checkbox" class="custom-control-input" id="showHideRiskSwitch"
+              onchange="updateShowOrHideRiskHeatmap()">
+            <label id="showHideRiskText" class="custom-control-label" for="showHideRiskSwitch">Risk Heatmap</label>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </nav>

@@ -153,3 +153,13 @@ function getPathBetweenPoints(points) {
         }
     });
 }
+
+function getRiskMap() {
+    return $.ajax('/prediction/get/forecast', {
+        contentType: 'application/json',
+        type: 'GET',
+        error: function (result) {
+            alert('Error predicting path from backend');
+        }
+    });
+}

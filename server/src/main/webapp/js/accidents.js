@@ -51,8 +51,11 @@ function getDay(day) {
 }
 
 function writeOutDate(date, weekday) {
-    let parts = date.split('/');
-    return `${getWeekday(weekday)}, ${getMonth(parts[1])} ${getDay(parts[0])}, ${parts[2]}`;
+    let parts = date.split('T');
+    let dateString = parts[0];
+    let dateParts = dateString.split('-');
+    //let parts = date.split('/');
+    return `${getWeekday(weekday)}, ${getMonth(dateParts[1])} ${getDay(dateParts[2])}, ${dateParts[0]}`;
 }
 
 function capitalizeString(string) {
@@ -70,9 +73,13 @@ function capitalizeSentence(sentence) {
     return fixedSentence;
 }
 
+function getHour(date) {
+    return date.split('T')[1].split('.')[0]
+}
+
 function populateTitle(accident) {
     $(`#accident-card-description`)[0].innerHTML =
-        `${capitalizeString(accident['type'].replaceAll('_', ' '))} on ${writeOutDate(accident['date_time']['date'], accident['date_time']['weekday'])}, at ${accident['date_time']['hour']}`;
+        `${capitalizeString(accident['type'].replaceAll('_', ' '))} on ${writeOutDate(accident['date_time']['date'], accident['date_time']['weekday'])}, at ${getHour(accident['date_time']['hour'])}`;
     $(`#accident-card-id`)[0].innerHTML = accident['externalId'];
 }
 

@@ -2,7 +2,7 @@ package com.example.accidentsRS.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class Date {
+public class DateTimeModel {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "GMT-3")
     public static final String DATE = "date";

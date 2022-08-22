@@ -9,7 +9,7 @@ public class ClimateModel extends PersistedModel {
     @Id
     private String id;
     public static final String DATE_TIME = "dateTime";
-    private Date dateTime;
+    private DateTimeModel dateTime;
     public static final String VISIBILITY = "visibility";
     private Float visibility;
     public static final String RELATIVE_HUMIDITY_PERCENTAGE = "relativeHumidityPercentage";
@@ -31,11 +31,11 @@ public class ClimateModel extends PersistedModel {
         this.id = id;
     }
 
-    public Date getDateTime() {
+    public DateTimeModel getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(DateTimeModel dateTime) {
         this.dateTime = dateTime;
     }
 

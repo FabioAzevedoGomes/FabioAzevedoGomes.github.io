@@ -15,7 +15,7 @@ public class AccidentModel extends PersistedModel {
     public static final String ADDRESS = "address";
     private Address address;
     public static final String DATE = "date";
-    private Date date;
+    private DateTimeModel date;
     public static final String FATALITY = "fatality";
     private Fatality fatality;
     public static final String INVOLVED_ENTITIES = "involvedEntities";
@@ -49,12 +49,12 @@ public class AccidentModel extends PersistedModel {
         this.address = address;
     }
 
-    public Date getDate() {
+    public DateTimeModel getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate(DateTimeModel dateTimeModel) {
+        this.date = dateTimeModel;
     }
 
     public Fatality getFatality() {

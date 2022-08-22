@@ -1,9 +1,11 @@
 package com.example.accidentsRS.facade.impl;
 
+import com.example.accidentsRS.data.RegionRiskData;
 import com.example.accidentsRS.model.Location;
 import com.example.accidentsRS.model.PredictiveModel;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.facade.PredictionFacade;
+import com.example.accidentsRS.services.MapService;
 import com.example.accidentsRS.services.PredictionService;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +26,9 @@ public class DefaultPredictionFacade implements PredictionFacade {
 
     @Autowired
     PredictionService defaultPredictionService;
+
+    @Autowired
+    MapService defaultMapService;
 
     @Override
     public void savePredictiveModel(final MultipartFile predictiveModel) throws PersistenceException {
@@ -47,7 +53,12 @@ public class DefaultPredictionFacade implements PredictionFacade {
 
     @Override
     public float predict(final Location location) {
-        final java.util.Date today = new java.util.Date();
-        return defaultPredictionService.predict(today, location);
+        return defaultPredictionService.predict(new Date(), location);
+    }
+
+    @Override
+    public List<RegionRiskData> getForecast() {
+        final Date today = new Date();
+        return null;
     }
 }

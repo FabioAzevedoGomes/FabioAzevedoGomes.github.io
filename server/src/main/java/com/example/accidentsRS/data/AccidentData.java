@@ -8,7 +8,7 @@ public class AccidentData {
 
     private String externalId;
     private Address address;
-    private Date date_time;
+    private DateTimeModel date_time;
     private Fatality fatality;
     private List<String> involved_entities;
     private String type;
@@ -30,11 +30,11 @@ public class AccidentData {
         this.address = address;
     }
 
-    public Date getDate_time() {
+    public DateTimeModel getDate_time() {
         return date_time;
     }
 
-    public void setDate_time(Date date_time) {
+    public void setDate_time(DateTimeModel date_time) {
         this.date_time = date_time;
     }
 

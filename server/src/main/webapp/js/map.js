@@ -1,7 +1,8 @@
 const LayerNames = {
     Accident: "Accident",
     LocationSuggestion: "LocationSuggestion",
-    PathViewing: "PathView"
+    PathViewing: "PathView",
+    RiskHeatmap: "RiskHeatmap"
 }
 
 class BaseLayer {
@@ -198,6 +199,44 @@ class PathViewingLayer extends BaseLayer {
                 }
             }
         }).then(thenFunction);
+    }
+}
+
+class RiskHeatmapLayer extends BaseLayer {
+
+    LAYER_NAME = `RiskHeatmap`
+
+    constructor() {
+        super(`RiskHeatmap`);
+        this.sourceVector = new ol.source.Vector({ features: this.features });
+        this.layerVector = new ol.layer.Heatmap({
+            source: this.sourceVector,
+            name: this.name,
+            blur: 10,
+            radius: 10,
+            weight: function (feature) {
+              return feature['riskIndex'];
+            },
+        });
+    }
+
+    processClick(evt) {
+        // noop
+    }
+
+    shouldRefresh() {
+        return $(`#showHideRiskSwitch`)[0].checked;
+    }
+
+    refresh(thenFunction) {
+        if (this.shouldRefresh()) {
+            getRiskMap().then(regions => {
+                regions.forEach(region => {
+                    this.features.push(region);
+                });
+                thenFunction();
+            });
+        }
     }
 }
 

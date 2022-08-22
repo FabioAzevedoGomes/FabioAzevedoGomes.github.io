@@ -1,5 +1,7 @@
 package com.example.accidentsRS.prediction.impl;
 
+import com.example.accidentsRS.dao.AccidentDao;
+import com.example.accidentsRS.dao.MapDao;
 import com.example.accidentsRS.dao.PredictiveModelDao;
 import com.example.accidentsRS.model.Location;
 import com.example.accidentsRS.prediction.Predictor;
@@ -26,7 +28,13 @@ public class DefaultPredictor implements Predictor {
     @Autowired
     PredictiveModelDao defaultPredictiveModelDao;
 
-    protected INDArray[] getInputFeatures() {
+    @Autowired
+    AccidentDao defaultAccidentDao;
+
+    @Autowired
+    MapDao defaultMapDao;
+
+    protected INDArray[] getInputFeatures(final Date date, final Location place) {
         final INDArray firstInputFeatures = Nd4j.zeros(BATCH_SIZE, NUM_FIRST_FEATURES, PERIOD_SIZE_DAYS);
         final INDArray secondInputFeatures = Nd4j.zeros(BATCH_SIZE, NUM_SECOND_FEATURES);
         return new INDArray[]{firstInputFeatures, secondInputFeatures};
@@ -35,8 +43,13 @@ public class DefaultPredictor implements Predictor {
     @Override
     public float predictRiskForDateAndPlace(final Date date, final Location place) throws Exception {
         final ComputationGraph model = defaultPredictiveModelDao.getNetworkByName(getModelName());
-        final INDArray[] inputData = getInputFeatures();
+        final INDArray[] inputData = getInputFeatures(date, place);
         return model.output(inputData)[0].getFloat(0);
+    }
+
+    @Override
+    public void forecastForToday() {
+
     }
 
     public String getModelName() {

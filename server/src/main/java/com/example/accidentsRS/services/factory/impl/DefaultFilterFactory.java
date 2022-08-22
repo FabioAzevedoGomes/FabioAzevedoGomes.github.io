@@ -1,7 +1,7 @@
 package com.example.accidentsRS.services.factory.impl;
 
 import com.example.accidentsRS.model.AccidentModel;
-import com.example.accidentsRS.model.Date;
+import com.example.accidentsRS.model.DateTimeModel;
 import com.example.accidentsRS.model.DirectionalStreetModel;
 import com.example.accidentsRS.model.filter.FilterWrapperModel;
 import com.example.accidentsRS.model.filter.OperationEnum;
@@ -17,7 +17,7 @@ public class DefaultFilterFactory implements FilterFactory {
     private static final int TIME_OF_DAY_CONSTANT = 3600000;
 
     @Override
-    public List<FilterWrapperModel> createFilterForDateTime(final Date dateTime) {
+    public List<FilterWrapperModel> createFilterForDateTime(final DateTimeModel dateTime) {
         long measurementToD = dateTime.getTime_of_day();
         long minToD = measurementToD;
         long maxToD = measurementToD;
@@ -33,19 +33,19 @@ public class DefaultFilterFactory implements FilterFactory {
         }
 
         final FilterWrapperModel dateFilter = new FilterWrapperModel(
-                Collections.singletonList(AccidentModel.DATE + "." + Date.DATE),
+                Collections.singletonList(AccidentModel.DATE + "." + DateTimeModel.DATE),
                 OperationEnum.IS,
                 dateTime.getDate()
         );
 
         final FilterWrapperModel firstTimeFilter = new FilterWrapperModel(
-                Collections.singletonList(AccidentModel.DATE + "." + Date.TIME_OF_DAY),
+                Collections.singletonList(AccidentModel.DATE + "." + DateTimeModel.TIME_OF_DAY),
                 OperationEnum.GREATER_OR_EQUAL,
                 minToD
         );
 
         final FilterWrapperModel secondTimeFilter = new FilterWrapperModel(
-                Collections.singletonList(AccidentModel.DATE + "." + Date.TIME_OF_DAY),
+                Collections.singletonList(AccidentModel.DATE + "." + DateTimeModel.TIME_OF_DAY),
                 OperationEnum.LESS_THAN,
                 maxToD
         );
