@@ -17,6 +17,7 @@ class FeatureFactory:
     region_height_cells: int
     total_regions: int
     total_region_features: int
+    width_height_lat_diff: float
 
     def __init__(self):
         self.region_bounding_box = BoundingBox.from_points(get_bounding_box())
@@ -31,6 +32,8 @@ class FeatureFactory:
             len(RiskFeaturesEnum) + \
             len(WeatherFeaturesEnum) + \
             len(CoordinateFeaturesEnum)
+
+        self.width_height_lat_diff = abs(self.get_region_center(0, 0)[0] - self.get_region_center(0, 1)[0])
 
     def get_location_cell(self, location: Coordinates) -> Tuple[int, int]:
         x, y = self.region_bounding_box.get_cell_given_size(
@@ -82,7 +85,7 @@ class FeatureFactory:
 
         return feature_matrix
 
-    def get_geo_features(self) -> np.ndarray:
+    def get_geo_features(self):
         centers = np.zeros(
             shape=(
                 self.region_width_cells,
@@ -92,21 +95,49 @@ class FeatureFactory:
             dtype=float
         )
 
+        regions = []
+
         for x in range(self.region_width_cells):
             for y in range(self.region_height_cells):
-                centers[x][y][:] = self.get_region_center(x, y)
+                center = self.get_region_center(x, y)
+                centers[x][y][0] = center[0]
+                centers[x][y][1] = center[1]
+                regions.append(self.get_region_bounds(x, y))
 
-        return centers
+        return (centers, regions)
+
+    def get_region_bounds(self, region_x: int, region_y: int):
+        center = self.get_region_center(region_x, region_y)
+        bounds = {
+            "regionId": "",
+            "predictor": "",
+            "center": {
+                "latitude": center[0],
+                "longitude": center[1]
+            },
+            "risk": -1,
+            "bounds": {
+                "coordinates": [
+                    [center[0] + self.width_height_lat_diff / 2.0, center[1] + self.width_height_lat_diff / 2.0],
+                    [center[0] + self.width_height_lat_diff / 2.0, center[1] - self.width_height_lat_diff / 2.0],
+                    [center[0] - self.width_height_lat_diff / 2.0, center[1] + self.width_height_lat_diff / 2.0],
+                    [center[0] - self.width_height_lat_diff / 2.0, center[1] - self.width_height_lat_diff / 2.0]
+                ],
+                "type": "Polygon"
+            }
+        }
+
+        return bounds
 
     def get_region_center(self, region_x: int, region_y: int) -> np.ndarray:
         return Coordinates(
             latitude=(
-                ((region_x + 0.5) / self.region_width_cells) *
+                ((region_y + 0.5) / self.region_width_cells) *
                 (self.region_bounding_box.north_east.latitude -
                  self.region_bounding_box.south_west.latitude)
             ) + self.region_bounding_box.south_west.latitude,
             longitude=(
-                ((region_y + 0.5) / self.region_height_cells) *
+                ((region_x + 0.5) / self.region_height_cells) *
                 (self.region_bounding_box.north_east.longitude -
                  self.region_bounding_box.south_west.longitude)
             ) + self.region_bounding_box.south_west.longitude

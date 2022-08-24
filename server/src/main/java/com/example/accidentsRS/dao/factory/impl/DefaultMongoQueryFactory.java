@@ -4,22 +4,31 @@ import com.example.accidentsRS.dao.factory.MongoQueryFactory;
 import com.example.accidentsRS.model.DirectionalStreetModel;
 import com.example.accidentsRS.model.ExtendedIntersectionModel;
 import com.example.accidentsRS.model.IntersectionModel;
+import com.example.accidentsRS.model.Location;
 import com.example.accidentsRS.model.filter.FilterWrapperModel;
 import com.example.accidentsRS.model.filter.OperationEnum;
+import com.example.accidentsRS.model.prediction.AggregatePredictorModel;
+import com.example.accidentsRS.model.prediction.Bounds;
+import com.example.accidentsRS.model.prediction.Predictor;
+import com.example.accidentsRS.model.prediction.Region;
+import com.mongodb.lang.Nullable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.geo.Point;
+import org.springframework.data.geo.Polygon;
+import org.springframework.data.geo.Shape;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.LookupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Objects.nonNull;
 
 @Component
 public class DefaultMongoQueryFactory implements MongoQueryFactory {
@@ -148,5 +157,63 @@ public class DefaultMongoQueryFactory implements MongoQueryFactory {
             sort = createDescendingSort(field);
         }
         return new Query().limit(1).with(sort);
+    }
+
+    @Override
+    public Aggregation aggregatePredictiveModel(final String modelName) {
+        return Aggregation.newAggregation(
+                new MatchOperation(Criteria.where(Predictor.NAME).is(modelName)),
+                LookupOperation.newLookup()
+                        .from(Region.COLLECTION_NAME)
+                        .localField(Predictor.DOMAIN)
+                        .foreignField(Region.REGION_ID)
+                        .as(AggregatePredictorModel.POPULATED_DOMAIN)
+        );
+    }
+
+    @Override
+    public Query createRegionFromModelIntersectsPointQuery(Location point, String modelName) {
+        final GeoJsonPoint geoPoint = new GeoJsonPoint(new Point(point.getLatitude(), point.getLongitude()));
+        return Query.query(
+                Criteria.where(Region.PREDICTOR).is(modelName).andOperator(
+                        Criteria.where(Region.BOUNDS + "." + Bounds.COORDINATES).intersects(geoPoint))
+        );
+    }
+
+    protected Criteria getWithinSpaceCriteria(final Bounds bounds, final String coordinateFieldName) {
+        final Shape boundsShape = new Polygon(bounds.getCoordinates()
+                .stream()
+                .map(list -> new Point(list.get(0), list.get(1)))
+                .collect(Collectors.toList())
+        );
+        return Criteria.where(coordinateFieldName).within(boundsShape);
+    }
+
+    protected List<Criteria> getWithinTimeCriteria(final Date date, final String dateFieldName) {
+        final Date dateWithoutTime = new Date(date.getTime());
+        dateWithoutTime.setHours(0);
+        dateWithoutTime.setMinutes(0);
+        dateWithoutTime.setSeconds(0);
+        final Date dateWithMaxTime = new Date(date.getTime());
+        dateWithMaxTime.setHours(23);
+        dateWithMaxTime.setMinutes(59);
+        dateWithMaxTime.setSeconds(59);
+        List<Criteria> list = new ArrayList<>();
+        list.add(Criteria.where(dateFieldName).lte(dateWithMaxTime));
+        list.add(Criteria.where(dateFieldName).gte(dateWithoutTime));
+        return list;
+    }
+
+    @Override
+    public Query createWithinSpaceTimeQuery(@Nullable Bounds bounds, final Date date, final String coordinateFieldName, final String dateFieldName) {
+        Criteria criterion = Criteria.where("");
+        List<Criteria> criteriaList = new ArrayList<>(getWithinTimeCriteria(date, dateFieldName));
+
+        if (nonNull(bounds)) {
+            criteriaList.add(getWithinSpaceCriteria(bounds, coordinateFieldName));
+        }
+
+        criterion = criterion.andOperator(criteriaList);
+        return Query.query(criterion);
     }
 }

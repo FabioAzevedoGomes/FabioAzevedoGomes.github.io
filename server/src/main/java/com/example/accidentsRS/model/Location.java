@@ -9,6 +9,9 @@ public class Location {
     public static final String LATITUDE = "latitude";
     private Float latitude;
 
+    public Location() {
+    }
+
     public Location(Float longitude, Float latitude) {
         this.longitude = longitude;
         this.latitude = latitude;

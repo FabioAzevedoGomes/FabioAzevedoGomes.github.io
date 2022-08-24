@@ -7,10 +7,13 @@ import com.example.accidentsRS.model.Address;
 import com.example.accidentsRS.model.DateTimeModel;
 import com.example.accidentsRS.model.Location;
 import com.example.accidentsRS.model.filter.FilterWrapperModel;
+import com.example.accidentsRS.model.prediction.Bounds;
 import com.example.accidentsRS.model.update.UpdateModel;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DefaultAccidentDao extends AbstractDao<AccidentModel> implements AccidentDao {
@@ -42,7 +45,7 @@ public class DefaultAccidentDao extends AbstractDao<AccidentModel> implements Ac
                 AccidentModel.DATE + "." + DateTimeModel.DATE,
                 AccidentModel.class,
                 java.util.Date.class
-        );
+        ).stream().sorted().collect(Collectors.toList());
     }
 
     @Override
@@ -75,7 +78,7 @@ public class DefaultAccidentDao extends AbstractDao<AccidentModel> implements Ac
                         AccidentModel.ADDRESS + "." + Address.LOCATION + "." + Location.LONGITUDE
                 ),
                 AccidentModel.class
-        ).getAddress().getLocation().getLatitude();
+        ).getAddress().getLocation().getLongitude();
     }
 
     @Override
@@ -86,6 +89,19 @@ public class DefaultAccidentDao extends AbstractDao<AccidentModel> implements Ac
                         AccidentModel.ADDRESS + "." + Address.LOCATION + "." + Location.LONGITUDE
                 ),
                 AccidentModel.class
-        ).getAddress().getLocation().getLatitude();
+        ).getAddress().getLocation().getLongitude();
+    }
+
+    @Override
+    public List<AccidentModel> getAccidentsWithinSpaceTime(final Bounds bounds, final Date date) {
+        return mongoOperations.find(
+                defaultMongoQueryFactory.createWithinSpaceTimeQuery(
+                        bounds,
+                        date,
+                        AccidentModel.ADDRESS + "." + Address.LOCATION,
+                        AccidentModel.DATE + "." + DateTimeModel.DATE
+                ),
+                AccidentModel.class
+        );
     }
 }

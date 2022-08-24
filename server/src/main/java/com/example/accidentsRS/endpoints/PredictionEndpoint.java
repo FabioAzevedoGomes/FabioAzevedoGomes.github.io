@@ -1,16 +1,11 @@
 package com.example.accidentsRS.endpoints;
 
-import com.example.accidentsRS.data.RegionRiskData;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.facade.PredictionFacade;
 import com.example.accidentsRS.model.Location;
+import com.example.accidentsRS.model.prediction.Region;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,31 +21,20 @@ public class PredictionEndpoint {
     @Autowired
     PredictionFacade defaultPredictionFacade;
 
-    @RequestMapping(value = "/model/persist", method = RequestMethod.POST)
-    public void persistTrainedModel(@RequestBody final MultipartFile predictiveModel) throws PersistenceException {
-        defaultPredictionFacade.savePredictiveModel(predictiveModel);
+    @RequestMapping(value = "/model/persist", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_OCTET_STREAM_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public void persistTrainedModel(@RequestPart("bounds") final String bounds,
+                                    @RequestPart("predictiveModel") final MultipartFile predictiveModel) throws PersistenceException {
+        defaultPredictionFacade.savePredictiveModel(predictiveModel, bounds);
     }
 
-    @RequestMapping(value = "/model/get", method = RequestMethod.GET)
-    public ResponseEntity<Resource> getTrainedModelModel(@RequestParam("name") final String modelName) {
-        ByteArrayResource resource = new ByteArrayResource(defaultPredictionFacade.getPredictiveModel(modelName).getData());
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .contentLength(resource.contentLength())
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        ContentDisposition.attachment()
-                                .filename("model.hd5")
-                                .build().toString())
-                .body(resource);
+    @RequestMapping(value = "/model/predict/today", method = RequestMethod.GET)
+    public List<Region> predictToday() {
+        return defaultPredictionFacade.forecastToday();
     }
 
-    @RequestMapping(value = "/model/predict", method = RequestMethod.POST)
-    public float predict(@RequestBody final Location location) {
-        return defaultPredictionFacade.predict(location);
+    @RequestMapping(value = "/model/predict/point", method = RequestMethod.POST)
+    public float predictPoint(@RequestBody final Location location) {
+        return defaultPredictionFacade.predictForPoint(location);
     }
 
-    @RequestMapping(value = "/get/forecast", method = RequestMethod.GET)
-    public List<RegionRiskData> getForecast() {
-        return defaultPredictionFacade.getForecast();
-    }
 }

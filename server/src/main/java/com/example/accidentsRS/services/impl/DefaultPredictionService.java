@@ -1,22 +1,22 @@
 package com.example.accidentsRS.services.impl;
 
-import com.example.accidentsRS.dao.PredictiveModelDao;
+import com.example.accidentsRS.dao.PredictorDao;
 import com.example.accidentsRS.model.Location;
-import com.example.accidentsRS.model.PredictiveModel;
-import com.example.accidentsRS.exceptions.PersistenceException;
-import com.example.accidentsRS.prediction.Predictor;
+import com.example.accidentsRS.model.prediction.AggregatePredictorModel;
+import com.example.accidentsRS.model.prediction.Predictor;
+import com.example.accidentsRS.model.prediction.Region;
 import com.example.accidentsRS.services.PredictionService;
+import com.example.accidentsRS.services.factory.FeatureFactory;
+import org.nd4j.linalg.api.ndarray.INDArray;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static java.util.Objects.nonNull;
 
 @Component
 public class DefaultPredictionService implements PredictionService {
@@ -24,40 +24,51 @@ public class DefaultPredictionService implements PredictionService {
     private static final Logger LOGGER = Logger.getLogger(DefaultPredictionService.class.getName());
 
     @Autowired
-    Predictor defaultPredictor;
+    FeatureFactory defaultFeatureFactory;
 
     @Autowired
-    MongoOperations mongoOperations;
-
-    @Autowired
-    PredictiveModelDao defaultPredictiveModelDao;
+    PredictorDao defaultPredictorDao;
 
     @Override
-    public void savePredictionModel(final PredictiveModel predictiveModel) throws PersistenceException {
-        final PredictiveModel model = mongoOperations.findOne(
-                Query.query(Criteria.where("version").is(predictiveModel.getVersion())),
-                PredictiveModel.class
-        );
+    public void savePredictor(final Predictor predictor, final List<Region> regionList) {
+        defaultPredictorDao.savePredictor(predictor, regionList);
+    }
 
-        if (nonNull(model)) {
-            throw new PersistenceException("Predictive model " + predictiveModel.getVersion() + " already exists!");
-        }
+    protected void persistPredictionResults(final List<Region> regionList) {
 
-        mongoOperations.save(predictiveModel);
     }
 
     @Override
-    public PredictiveModel getPredictionModel(final String modelName) {
-        return defaultPredictiveModelDao.getPredictionModel(modelName);
-    }
-
-    @Override
-    public float predict(final Date date, final Location place) {
+    public List<Region> forecastTodayUsing(final String modelName) {
         try {
-            return defaultPredictor.predictRiskForDateAndPlace(date, place);
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error predicting risk for date " + date + " and place " + place, e);
-            return 1.0f;
+            final AggregatePredictorModel model = defaultPredictorDao.getPredictorByName(modelName);
+            LOGGER.log(Level.INFO, "Starting forecast for today");
+            final Date now = new Date();
+            for (Region region : model.getDomain()) {
+                LOGGER.log(Level.INFO, "Predicting for region " + region.getRegionId());
+                INDArray features = defaultFeatureFactory.getFeaturesForRegionAndDate(region, now);
+                float prediction = model.predict(features, region);
+                region.setRisk(prediction);
+            }
+            LOGGER.log(Level.INFO, "Done predicting for today");
+            persistPredictionResults(model.getDomain());
+            return model.getDomain();
+        } catch (final Exception e) {
+            LOGGER.log(Level.SEVERE, "Exception occurred trying to predict risk with " + modelName, e);
         }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public float predictRiskAtPointUsing(final Location point, final String modelName) {
+        try {
+            final Region encompassingRegion = defaultPredictorDao.getRegionOfPointInModel(point, modelName);
+            final AggregatePredictorModel model = defaultPredictorDao.getPredictorByName(modelName);
+            final INDArray features = defaultFeatureFactory.getFeaturesForRegionAndDate(encompassingRegion, new Date());
+            return model.predict(features, encompassingRegion);
+        } catch (final Exception e) {
+            LOGGER.log(Level.SEVERE, "Exception occurred trying to predict risk with " + modelName, e);
+        }
+        return -1;
     }
 }

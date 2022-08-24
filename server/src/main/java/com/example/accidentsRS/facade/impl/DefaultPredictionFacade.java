@@ -1,23 +1,29 @@
 package com.example.accidentsRS.facade.impl;
 
-import com.example.accidentsRS.data.RegionRiskData;
-import com.example.accidentsRS.model.Location;
-import com.example.accidentsRS.model.PredictiveModel;
+import com.example.accidentsRS.data.InboundPredictor;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.facade.PredictionFacade;
-import com.example.accidentsRS.services.MapService;
+import com.example.accidentsRS.model.Location;
+import com.example.accidentsRS.model.prediction.Predictor;
+import com.example.accidentsRS.model.prediction.Region;
 import com.example.accidentsRS.services.PredictionService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Component
 public class DefaultPredictionFacade implements PredictionFacade {
@@ -27,38 +33,63 @@ public class DefaultPredictionFacade implements PredictionFacade {
     @Autowired
     PredictionService defaultPredictionService;
 
-    @Autowired
-    MapService defaultMapService;
+    @Value("${default.model.name}")
+    private String defaultModel;
+
+    private String getUniqueId() {
+        return UUID.randomUUID().toString();
+    }
 
     @Override
-    public void savePredictiveModel(final MultipartFile predictiveModel) throws PersistenceException {
+    public void savePredictiveModel(final MultipartFile predictiveModel, final String regionListJson) throws PersistenceException {
         try {
-            PredictiveModel model = new PredictiveModel();
-            model.setVersion(predictiveModel.getOriginalFilename());
-            model.setModel(new Binary(BsonBinarySubType.BINARY, predictiveModel.getBytes()));
-            defaultPredictionService.savePredictionModel(model);
-        } catch (final PersistenceException persistenceException) {
-            LOGGER.log(Level.SEVERE, "Error saving predictive model " + predictiveModel.getName() + " not persisted!", persistenceException);
-            throw persistenceException;
+            final ObjectMapper mapper = new ObjectMapper();
+            final Region[] regionArray = mapper.readValue(regionListJson, Region[].class);
+            Arrays.asList(regionArray).forEach(region -> {
+                region.setRegionId(getUniqueId());
+                region.setPredictor(predictiveModel.getOriginalFilename());
+            });
+            final List<Region> regionList = Arrays.asList(regionArray);
+
+            final Predictor predictor = new Predictor();
+            predictor.setName(predictiveModel.getOriginalFilename());
+            predictor.setModel(new Binary(BsonBinarySubType.BINARY, predictiveModel.getBytes()));
+            predictor.setDomain(regionList.stream().map(Region::getRegionId).collect(Collectors.toList()));
+            defaultPredictionService.savePredictor(predictor, regionList);
+        } catch (final JsonProcessingException e) {
+            e.printStackTrace();
+            throw new PersistenceException("Invalid region list");
         } catch (final IOException ioException) {
-            LOGGER.log(Level.SEVERE, "Error saving predictive model " + predictiveModel.getName() + " not persisted!", ioException);
+            LOGGER.log(Level.SEVERE, "Error saving predictive model " + predictiveModel.getOriginalFilename() + " not persisted!", ioException);
             throw new PersistenceException("Error saving model to database!");
         }
     }
 
     @Override
-    public Binary getPredictiveModel(final String modelName) {
-        return defaultPredictionService.getPredictionModel(modelName).getModel();
+    public List<Region> forecastTodayUsing(final String modelName) {
+        return defaultPredictionService.forecastTodayUsing(modelName);
     }
 
     @Override
-    public float predict(final Location location) {
-        return defaultPredictionService.predict(new Date(), location);
+    public List<Region> forecastToday() {
+        return forecastTodayUsing(getDefaultModel());
     }
 
     @Override
-    public List<RegionRiskData> getForecast() {
-        final Date today = new Date();
-        return null;
+    public float predictForPointUsing(final Location point, final String modelName) {
+        return defaultPredictionService.predictRiskAtPointUsing(point, modelName);
+    }
+
+    @Override
+    public float predictForPoint(Location point) {
+        return predictForPointUsing(point, getDefaultModel());
+    }
+
+    public String getDefaultModel() {
+        return defaultModel;
+    }
+
+    public void setDefaultModel(String defaultModel) {
+        this.defaultModel = defaultModel;
     }
 }
