@@ -216,4 +216,9 @@ public class DefaultMongoQueryFactory implements MongoQueryFactory {
         criterion = criterion.andOperator(criteriaList);
         return Query.query(criterion);
     }
+
+    @Override
+    public Query createIdMatchQueryForRegions(final String regionId) {
+        return Query.query(Criteria.where(Region.REGION_ID).is(regionId));
+    }
 }

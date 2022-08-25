@@ -1,6 +1,7 @@
 package com.example.accidentsRS.dao.factory.impl;
 
 import com.example.accidentsRS.dao.factory.MongoUpdateFactory;
+import com.example.accidentsRS.model.prediction.Region;
 import com.example.accidentsRS.model.update.UpdateModel;
 import com.example.accidentsRS.model.update.UpdateTypeEnum;
 import org.springframework.data.mongodb.core.query.Update;
@@ -18,9 +19,16 @@ public class DefaultMongoUpdateFactory implements MongoUpdateFactory {
             if (UpdateTypeEnum.PUSH.equals(updateWrapperModel.getType())) {
                 update.push(updateWrapperModel.getField(), updateWrapperModel.getValue());
             } else if (UpdateTypeEnum.SET.equals(updateWrapperModel.getType())) {
-                update.push(updateWrapperModel.getField(), updateWrapperModel.getValue());
+                update.set(updateWrapperModel.getField(), updateWrapperModel.getValue());
             }
         });
+        return update;
+    }
+
+    @Override
+    public Update createRiskUpdate(float newValue) {
+        Update update = new Update();
+        update.set(Region.RISK, newValue);
         return update;
     }
 }

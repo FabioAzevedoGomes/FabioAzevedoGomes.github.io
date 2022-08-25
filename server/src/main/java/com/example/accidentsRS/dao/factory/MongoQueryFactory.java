@@ -18,4 +18,5 @@ public interface MongoQueryFactory {
     Aggregation aggregatePredictiveModel(String modelName);
     Query createRegionFromModelIntersectsPointQuery(Location point, String modelName);
     Query createWithinSpaceTimeQuery(Bounds bounds, Date date, String coordinateFieldName, String dateFieldName);
+    Query createIdMatchQueryForRegions(final String regionId);
 }

@@ -27,6 +27,16 @@ function updateShowOrHideAccidents() {
     }
 }
 
+function updateShowOrHideRiskHeatmap() {
+    shouldShow = document.getElementById("showHideRiskSwitch").checked
+
+    if (shouldShow) {
+        globalMap.reloadLayer(LayerNames.RiskHeatmap);
+    } else {
+        globalMap.disableLayer(LayerNames.RiskHeatmap);
+    }
+}
+
 function toggleAbout() {
     var aboutCard = document.getElementById('about-card-wrapper');
     if (aboutCard) {

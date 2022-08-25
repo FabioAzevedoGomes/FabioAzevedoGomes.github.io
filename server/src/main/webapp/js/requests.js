@@ -155,11 +155,11 @@ function getPathBetweenPoints(points) {
 }
 
 function getRiskMap() {
-    return $.ajax('/prediction/get/forecast', {
+    return $.ajax('/prediction/model/predict/today', {
         contentType: 'application/json',
         type: 'GET',
         error: function (result) {
-            alert('Error predicting path from backend');
+            alert('Error getting risk index from backend');
         }
     });
 }

@@ -2,7 +2,6 @@
 <script src="js/homepage.js"></script>
 <script src="js/requests.js"></script>
 <script src="js/accidents.js"></script>
-<script src="js/risk.js"></script>
 <script src="js/filter_templates.js"></script>
 <script src="js/filters.js"></script>
 <script src="js/accident_filter_row.js"></script>

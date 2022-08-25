@@ -13,7 +13,6 @@ import org.springframework.boot.system.ApplicationTemp;
 
 import java.io.*;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AggregatePredictorModel {
@@ -96,5 +95,9 @@ public class AggregatePredictorModel {
             this.modelCompiled = KerasModelImport.importKerasModelAndWeights(modelTempFile, false);
         }
         return this;
+    }
+
+    public boolean hasPredictedForToday() {
+        return getDomain().stream().anyMatch(region -> region.getRisk() != -1);
     }
 }

@@ -2,6 +2,7 @@ package com.example.accidentsRS.dao.impl;
 
 import com.example.accidentsRS.dao.PredictorDao;
 import com.example.accidentsRS.dao.factory.MongoQueryFactory;
+import com.example.accidentsRS.dao.factory.MongoUpdateFactory;
 import com.example.accidentsRS.exceptions.PersistenceException;
 import com.example.accidentsRS.model.Location;
 import com.example.accidentsRS.model.prediction.AggregatePredictorModel;
@@ -10,7 +11,9 @@ import com.example.accidentsRS.model.prediction.Region;
 import org.deeplearning4j.nn.modelimport.keras.exceptions.InvalidKerasConfigurationException;
 import org.deeplearning4j.nn.modelimport.keras.exceptions.UnsupportedKerasConfigurationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -21,6 +24,9 @@ public class DefaultPredictorDao implements PredictorDao {
 
     @Autowired
     MongoQueryFactory defaultMongoQueryFactory;
+
+    @Autowired
+    MongoUpdateFactory defaultMongoUpdateFactory;
 
     @Autowired
     MongoOperations mongoOperations;
@@ -50,6 +56,13 @@ public class DefaultPredictorDao implements PredictorDao {
     }
 
     public void updateRegionRiskIndexes(final List<Region> regionList) {
-
+        BulkOperations bulkOperations = mongoOperations.bulkOps(BulkOperations.BulkMode.UNORDERED, Region.class);
+        for (final Region region : regionList) {
+            bulkOperations.updateOne(
+                    defaultMongoQueryFactory.createIdMatchQueryForRegions(region.getRegionId()),
+                    defaultMongoUpdateFactory.createRiskUpdate(region.getRisk())
+            );
+        }
+        bulkOperations.execute();
     }
 }

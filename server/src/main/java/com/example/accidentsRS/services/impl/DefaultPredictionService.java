@@ -34,24 +34,22 @@ public class DefaultPredictionService implements PredictionService {
         defaultPredictorDao.savePredictor(predictor, regionList);
     }
 
-    protected void persistPredictionResults(final List<Region> regionList) {
-
-    }
-
     @Override
     public List<Region> forecastTodayUsing(final String modelName) {
         try {
             final AggregatePredictorModel model = defaultPredictorDao.getPredictorByName(modelName);
-            LOGGER.log(Level.INFO, "Starting forecast for today");
-            final Date now = new Date();
-            for (Region region : model.getDomain()) {
-                LOGGER.log(Level.INFO, "Predicting for region " + region.getRegionId());
-                INDArray features = defaultFeatureFactory.getFeaturesForRegionAndDate(region, now);
-                float prediction = model.predict(features, region);
-                region.setRisk(prediction);
+            if (!model.hasPredictedForToday()) {
+                LOGGER.log(Level.INFO, "Starting forecast for today");
+                final Date now = new Date();
+                for (Region region : model.getDomain()) {
+                    LOGGER.log(Level.INFO, "Predicting for region " + region.getRegionId());
+                    INDArray features = defaultFeatureFactory.getFeaturesForRegionAndDate(region, now);
+                    float prediction = model.predict(features, region);
+                    region.setRisk(prediction);
+                }
+                LOGGER.log(Level.INFO, "Done predicting for today");
+                defaultPredictorDao.updateRegionRiskIndexes(model.getDomain());
             }
-            LOGGER.log(Level.INFO, "Done predicting for today");
-            persistPredictionResults(model.getDomain());
             return model.getDomain();
         } catch (final Exception e) {
             LOGGER.log(Level.SEVERE, "Exception occurred trying to predict risk with " + modelName, e);

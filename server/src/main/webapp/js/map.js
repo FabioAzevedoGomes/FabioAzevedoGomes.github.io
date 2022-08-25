@@ -212,11 +212,20 @@ class RiskHeatmapLayer extends BaseLayer {
         this.layerVector = new ol.layer.Heatmap({
             source: this.sourceVector,
             name: this.name,
-            blur: 10,
-            radius: 10,
-            weight: function (feature) {
-              return feature['riskIndex'];
-            },
+            blur: 100,
+            radius: 50,
+            gradient:['#00f', '#0ff', '#0f0', '#ff0', '#f00'],
+        });
+    }
+
+    reload() {
+        this.sourceVector = new ol.source.Vector({ features: this.features });
+        this.layerVector = new ol.layer.Heatmap({
+            source: this.sourceVector,
+            name: this.name,
+            blur: 100,
+            radius: 50,
+            gradient:['#00f', '#0ff', '#0f0', '#ff0', '#f00'],
         });
     }
 
@@ -231,9 +240,25 @@ class RiskHeatmapLayer extends BaseLayer {
     refresh(thenFunction) {
         if (this.shouldRefresh()) {
             getRiskMap().then(regions => {
+                let max = 1e-10
+                let min = 1
                 regions.forEach(region => {
-                    this.features.push(region);
+                    if (region['risk'] > max) {
+                        max = region['risk'];
+                    }
+                    if (region['risk'] < min) {
+                        min = region['risk']
+                    }
                 });
+                regions.forEach(region => {
+                    this.features.push(
+                        new ol.Feature({
+                            geometry: new ol.geom.Point(ol.proj.fromLonLat([region['center']['longitude'], region['center']['latitude']])),
+                            weight: (region['risk'] - min )/ (max - min)
+                        })
+                    );
+                });
+                console.log(this.features);
                 thenFunction();
             });
         }
@@ -248,7 +273,8 @@ class MyMap {
         this.layers = [
             new AccidentsLayer(),
             new LocationSuggestionLayer(),
-            new PathViewingLayer()
+            new PathViewingLayer(),
+            new RiskHeatmapLayer(),
         ];
 
         this.map = new ol.Map({

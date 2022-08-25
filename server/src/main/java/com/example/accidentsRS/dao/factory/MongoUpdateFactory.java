@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface MongoUpdateFactory {
     Update createUpdateFromValues(final List<UpdateModel> updateValues);
+    Update createRiskUpdate(float newValue);
 }
