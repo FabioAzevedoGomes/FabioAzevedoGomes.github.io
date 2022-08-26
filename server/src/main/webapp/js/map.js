@@ -208,25 +208,6 @@ class RiskHeatmapLayer extends BaseLayer {
 
     constructor() {
         super(`RiskHeatmap`);
-        this.sourceVector = new ol.source.Vector({ features: this.features });
-        this.layerVector = new ol.layer.Heatmap({
-            source: this.sourceVector,
-            name: this.name,
-            blur: 100,
-            radius: 50,
-            gradient:['#00f', '#0ff', '#0f0', '#ff0', '#f00'],
-        });
-    }
-
-    reload() {
-        this.sourceVector = new ol.source.Vector({ features: this.features });
-        this.layerVector = new ol.layer.Heatmap({
-            source: this.sourceVector,
-            name: this.name,
-            blur: 100,
-            radius: 50,
-            gradient:['#00f', '#0ff', '#0f0', '#ff0', '#f00'],
-        });
     }
 
     processClick(evt) {
@@ -235,6 +216,33 @@ class RiskHeatmapLayer extends BaseLayer {
 
     shouldRefresh() {
         return $(`#showHideRiskSwitch`)[0].checked;
+    }
+
+    adjustCoordinates(coords) {
+        let min0 = 100000;
+        let min1 = 100000;
+        let max0 = -100000;
+        let max1 = -100000;
+        coords.forEach(coord => {
+            if (coord[0] < min0) {
+                min0 = coord[0];
+            }
+            if (coord[0] > max0) {
+                max0 = coord[0];
+            }
+            if (coord[1] < min1) {
+                min1 = coord[1];
+            }
+            if (coord[1] > max1) {
+                max1 = coord[1];
+            }
+        });
+        return [
+            [min0, min1],
+            [min0, max1],
+            [max0, max1],
+            [max0, min1]
+        ];
     }
 
     refresh(thenFunction) {
@@ -251,14 +259,29 @@ class RiskHeatmapLayer extends BaseLayer {
                     }
                 });
                 regions.forEach(region => {
-                    this.features.push(
-                        new ol.Feature({
-                            geometry: new ol.geom.Point(ol.proj.fromLonLat([region['center']['longitude'], region['center']['latitude']])),
-                            weight: (region['risk'] - min )/ (max - min)
-                        })
-                    );
+                    let ordered = this.adjustCoordinates(region['bounds']['coordinates'])
+                    let regionProjection = [];
+                    ordered.forEach(coord => {
+                        regionProjection.push(ol.proj.fromLonLat([coord[1], coord[0]]))
+                    });
+                    let intensity = (region['risk'] - min) / (max - min);
+
+                    let myStyle = new ol.style.Style({
+                       stroke : new ol.style.Stroke({
+                        color : `rgba(255,0,0,${intensity})`,
+                        width : 1    
+                     }),
+                       fill : new ol.style.Fill({
+                        color: `rgba(255,0,0,${intensity / 2.0})`
+                     })
+                    });
+                    
+                    let feature = new ol.Feature({
+                        geometry: new ol.geom.Polygon([regionProjection])
+                    });
+                    feature.setStyle(myStyle);
+                    this.features.push(feature);
                 });
-                console.log(this.features);
                 thenFunction();
             });
         }

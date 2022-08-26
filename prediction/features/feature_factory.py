@@ -33,7 +33,8 @@ class FeatureFactory:
             len(WeatherFeaturesEnum) + \
             len(CoordinateFeaturesEnum)
 
-        self.width_height_lat_diff = abs(self.get_region_center(0, 0)[0] - self.get_region_center(0, 1)[0])
+        self.lat_diff = abs(self.get_region_center(0, 0)[0] - self.get_region_center(0, 1)[0])
+        self.lon_diff = abs(self.get_region_center(0, 0)[1] - self.get_region_center(1, 0)[1])
 
     def get_location_cell(self, location: Coordinates) -> Tuple[int, int]:
         x, y = self.region_bounding_box.get_cell_given_size(
@@ -118,29 +119,28 @@ class FeatureFactory:
             "risk": -1,
             "bounds": {
                 "coordinates": [
-                    [center[0] + self.width_height_lat_diff / 2.0, center[1] + self.width_height_lat_diff / 2.0],
-                    [center[0] + self.width_height_lat_diff / 2.0, center[1] - self.width_height_lat_diff / 2.0],
-                    [center[0] - self.width_height_lat_diff / 2.0, center[1] + self.width_height_lat_diff / 2.0],
-                    [center[0] - self.width_height_lat_diff / 2.0, center[1] - self.width_height_lat_diff / 2.0]
+                    [center[0] + self.lat_diff / 2.0, center[1] + self.lon_diff / 2.0],
+                    [center[0] + self.lat_diff / 2.0, center[1] - self.lon_diff / 2.0],
+                    [center[0] - self.lat_diff / 2.0, center[1] + self.lon_diff / 2.0],
+                    [center[0] - self.lat_diff / 2.0, center[1] - self.lon_diff / 2.0]
                 ],
                 "type": "Polygon"
             }
         }
-
         return bounds
 
     def get_region_center(self, region_x: int, region_y: int) -> np.ndarray:
         return Coordinates(
             latitude=(
-                ((region_y + 0.5) / self.region_width_cells) *
-                (self.region_bounding_box.north_east.latitude -
-                 self.region_bounding_box.south_west.latitude)
-            ) + self.region_bounding_box.south_west.latitude,
-            longitude=(
-                ((region_x + 0.5) / self.region_height_cells) *
+                (float(region_y + 0.5) / float(self.region_width_cells)) *
                 (self.region_bounding_box.north_east.longitude -
                  self.region_bounding_box.south_west.longitude)
-            ) + self.region_bounding_box.south_west.longitude
+            ) + self.region_bounding_box.south_west.longitude,
+            longitude=(
+                (float(region_x + 0.5) / float(self.region_height_cells)) *
+                (self.region_bounding_box.north_east.latitude -
+                 self.region_bounding_box.south_west.latitude)
+            ) + self.region_bounding_box.south_west.latitude
         ).to_array()
 
     def get_number_of_regions(self) -> float:

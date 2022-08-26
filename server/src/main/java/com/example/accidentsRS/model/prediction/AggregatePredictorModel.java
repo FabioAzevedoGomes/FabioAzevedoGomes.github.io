@@ -76,9 +76,7 @@ public class AggregatePredictorModel {
     }
 
     public float predict(final INDArray features, final Region region) {
-        final Location center = region.getCenter();
-        final INDArray secondFeatures = Nd4j.zeros(1, 2);
-        secondFeatures.reshape(1, 2);
+        final Location center = region.getNormalizedCenter();
         final INDArray[] inputData = new INDArray[]{
                 features,
                 Nd4j.create(new float[]{center.getLatitude(), center.getLongitude()})

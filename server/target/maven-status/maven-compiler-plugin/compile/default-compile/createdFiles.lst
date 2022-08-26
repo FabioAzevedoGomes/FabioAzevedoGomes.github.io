@@ -3,7 +3,6 @@ com/example/accidentsRS/facade/impl/DefaultClimateFacade.class
 com/example/accidentsRS/services/factory/FilterFactory.class
 com/example/accidentsRS/services/factory/impl/DefaultUpdateFactory.class
 com/example/accidentsRS/controllers/HomePageController.class
-com/example/accidentsRS/model/Date.class
 com/example/accidentsRS/facade/MapFacade.class
 com/example/accidentsRS/data/IntersectionData.class
 com/example/accidentsRS/services/MapService.class
@@ -42,10 +41,8 @@ com/example/accidentsRS/converter/impl/DefaultAccidentReverseConverter.class
 com/example/accidentsRS/dao/factory/impl/DefaultMongoQueryFactory$1.class
 com/example/accidentsRS/pathfind/graph/AbstractGraph.class
 com/example/accidentsRS/services/ClimateService.class
-com/example/accidentsRS/prediction/DefaultPredictor.class
 com/example/accidentsRS/dao/impl/DefaultClimateDao.class
 com/example/accidentsRS/converter/ClimateConverter.class
-com/example/accidentsRS/dao/impl/DefaultPredictiveModelDao.class
 com/example/accidentsRS/pathfind/algorithm/AbstractPathFinder$SafeValueMap.class
 com/example/accidentsRS/pathfind/graph/inmemory/AbstractInMemoryGraph.class
 com/example/accidentsRS/converter/FilterConverter.class
@@ -85,7 +82,6 @@ com/example/accidentsRS/converter/impl/DefaultClimateConverter.class
 com/example/accidentsRS/services/AccidentService.class
 com/example/accidentsRS/converter/impl/DefaultAccidentConverter.class
 com/example/accidentsRS/pathfind/graph/Node.class
-com/example/accidentsRS/dao/PredictiveModelDao.class
 com/example/accidentsRS/services/impl/DefaultMapService.class
 com/example/accidentsRS/pathfind/algorithm/AbstractPathFinder$HeuristicNodeComparator.class
 com/example/accidentsRS/data/AccidentData.class
@@ -98,7 +94,6 @@ com/example/accidentsRS/converter/impl/StreetGeoPointReverseConverter.class
 com/example/accidentsRS/model/DirectionalStreetModel.class
 com/example/accidentsRS/model/AccidentModel.class
 com/example/accidentsRS/data/GeoPointData.class
-com/example/accidentsRS/prediction/Predictor.class
 com/example/accidentsRS/pathfind/factory/impl/DefaultGraphFactory.class
 com/example/accidentsRS/services/impl/DefaultClimateService.class
 com/example/accidentsRS/model/Location.class

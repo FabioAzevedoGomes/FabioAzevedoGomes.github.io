@@ -9,22 +9,22 @@ class Coordinates:
     """
     Latitude and longitude coordinates
     """
-    EARTH_RADIUS_KM = 6371
+    EARTH_RADIUS_KM = 6371.0
     latitude: float
     longitude: float
 
     @staticmethod
     def from_dict(coordinates: Dict[str, float]):
         return Coordinates(
-            latitude=coordinates['latitude'],
-            longitude=coordinates['longitude']
+            latitude=float(coordinates['latitude']),
+            longitude=float(coordinates['longitude'])
         )
 
     @staticmethod
     def from_point(coordinates: "Coordinates"):
         return Coordinates(            
-            latitude=coordinates.latitude,
-            longitude=coordinates.longitude
+            latitude=float(coordinates.latitude),
+            longitude=float(coordinates.longitude)
         )
 
     def distance_to(self, point: "Coordinates"):
@@ -92,11 +92,20 @@ class BoundingBox:
         horizontal_projection.latitude = self.south_west.latitude
         vertical_projection.longitude = self.south_west.longitude
 
-        distance_horizontal = self.south_west.distance_to(
-            horizontal_projection)
+        distance_horizontal = self.south_west.distance_to(horizontal_projection)
         distance_vertical = self.south_west.distance_to(vertical_projection)
 
         return (
             floor(distance_horizontal / region_width),
             floor(distance_vertical / region_height)
         )
+
+    def summary(self):
+        nw = self.north_west.to_array()
+        ne = self.north_east.to_array()
+        sw = self.south_west.to_array()
+        se = self.south_east.to_array()
+        print(f'NW = {nw[0]:.8f}, {nw[1]:.8f} \tNE = {ne[0]:.8f}, {ne[1]:.8f}')
+        print(f'SW = {sw[0]:.8f}, {sw[1]:.8f} \tSE = {se[0]:.8f}, {se[1]:.8f}')
+        print(f'Width (Longitude):\t{self.width:.8f} km /\t {abs(nw[1] - ne[1]):.8f} deg')
+        print(f'Height (Latitude):\t{self.height:.8f} km /\t {abs(sw[0] - nw[0]):.8f} deg')

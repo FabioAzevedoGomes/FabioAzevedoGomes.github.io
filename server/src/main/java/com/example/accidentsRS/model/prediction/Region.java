@@ -15,6 +15,8 @@ public class Region {
     private String predictor;
     public static final String CENTER = "center";
     private Location center;
+    public static final String NORMALIZED_CENTER = "normalizedCenter";
+    private Location normalizedCenter;
     public static final String RISK = "risk";
     private float risk;
     public static final String BOUNDS = "bounds";
@@ -49,6 +51,14 @@ public class Region {
 
     public Location getCenter() {
         return center;
+    }
+
+    public Location getNormalizedCenter() {
+        return normalizedCenter;
+    }
+
+    public void setNormalizedCenter(Location normalizedCenter) {
+        this.normalizedCenter = normalizedCenter;
     }
 
     public void setCenter(Location center) {
