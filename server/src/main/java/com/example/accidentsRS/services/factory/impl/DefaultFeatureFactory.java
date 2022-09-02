@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -53,12 +54,22 @@ public class DefaultFeatureFactory implements FeatureFactory {
         return relevantDates.subList(position - 8, position - 1);
     }
 
-    private float computeRiskLevel(float deaths, float serious, float light) {
-        return (3 * deaths + 2 * serious + light) / 6.0f;
+    private float computeRiskLevel(float total_accidents, float deaths, float serious, float light) {
+        return ((deaths / total_accidents) + ((serious / 2.0f) / total_accidents) + ((light / 3.0f) / total_accidents)) / 3.0f;
     }
 
-    private float[] processAccidents(final List<AccidentModel> accidents) {
-        float[] featureArray = new float[]{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+    private float[] processAccidents(final List<AccidentModel> accidents, final Date relevantDate) {
+        Calendar date = Calendar.getInstance();
+        date.setTime(relevantDate);
+        float[] featureArray = new float[]{
+                //0.0f,
+                //0.0f,
+                //0.0f,
+                //0.0f,
+                0.0f,
+                (date.get(Calendar.DAY_OF_WEEK) - 1) / 6.0f
+                //0.0f
+        };
         if (!CollectionUtils.isEmpty(accidents)) {
             float totalAccidents = accidents.size() / MAX_ACCIDENTS_PER_REGION;
             float totalDeaths = 0;
@@ -72,22 +83,23 @@ public class DefaultFeatureFactory implements FeatureFactory {
                 avgTime += accidentModel.getDate().getTime_of_day();
             }
 
+            float avgRisk = computeRiskLevel(accidents.size(), totalDeaths, totalSerious, totalLight);
             totalDeaths /= accidents.size();
             totalDeaths /= DEATHS_MAX;
             totalSerious /= accidents.size();
             totalSerious /= SERIOUS_INJURIES_MAX;
             totalLight /= accidents.size();
             totalLight /= LIGHT_INJURIES_MAX;
-            float avgRisk = computeRiskLevel(totalDeaths, totalSerious, totalLight);
             avgTime /= accidents.size();
             avgTime /= TIME_OF_DAY_MAX;
             featureArray = new float[]{
-                    Math.min(totalAccidents, 1.0f),
-                    Math.min(totalDeaths, 1.0f),
-                    Math.min(totalSerious, 1.0f),
-                    Math.min(totalLight, 1.0f),
+                    //Math.min(totalAccidents, 1.0f),
+                    //Math.min(totalDeaths, 1.0f),
+                    //Math.min(totalSerious, 1.0f),
+                    //Math.min(totalLight, 1.0f),
                     Math.min(avgRisk, 1.0f),
-                    Math.min(avgTime, 1.0f)
+                    (date.get(Calendar.DAY_OF_WEEK) - 1) / 6.0f
+                    //Math.min(avgTime, 1.0f)
             };
         }
         return featureArray;
@@ -114,7 +126,7 @@ public class DefaultFeatureFactory implements FeatureFactory {
             featureArray = new float[]{
                     Math.min(avgVisibility, 1.0f),
                     Math.min(avgPrecipitation, 1.0f),
-                    Math.min(avgHumidity, 1.0f)
+                    //Math.min(avgHumidity, 1.0f)
             };
         }
         return featureArray;
@@ -122,18 +134,20 @@ public class DefaultFeatureFactory implements FeatureFactory {
 
     @Override
     public INDArray getFeaturesForRegionAndDate(final Region region, final Date date) {
-        float[][] featuresJavaArray = new float[7][9];
+        int ACC_FEATURES = 2;
+        int CLIMATE_FEATURES = 2;
+        float[][] featuresJavaArray = new float[7][ACC_FEATURES + CLIMATE_FEATURES];
         int index = 0;
         for (final Date relevantDate : getRelevantDates(date)) {
             final List<AccidentModel> allAccidents = getAllAccidents(region, relevantDate);
-            float[] accidentFeatures = processAccidents(allAccidents);
-            System.arraycopy(accidentFeatures, 0, featuresJavaArray[index], 0, 6);
+            float[] accidentFeatures = processAccidents(allAccidents, relevantDate);
+            System.arraycopy(accidentFeatures, 0, featuresJavaArray[index], 0, ACC_FEATURES);
             final List<ClimateModel> allClimate = getAllClimate(relevantDate);
             float[] climateFeatures = processClimate(allClimate);
-            System.arraycopy(climateFeatures, 0, featuresJavaArray[index], 6, 3);
+            System.arraycopy(climateFeatures, 0, featuresJavaArray[index], ACC_FEATURES, CLIMATE_FEATURES);
             index++;
         }
         INDArray featureArray = Nd4j.create(featuresJavaArray);
-        return featureArray.reshape(1, 9, 7);
+        return featureArray.reshape(1, ACC_FEATURES + CLIMATE_FEATURES, 7);
     }
 }
