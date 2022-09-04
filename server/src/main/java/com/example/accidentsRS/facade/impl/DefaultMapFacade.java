@@ -82,6 +82,6 @@ public class DefaultMapFacade implements MapFacade {
     public List<Location> suggestPath(final PathSuggestionParameterWrapper pathSuggestionParameter) {
         pathSuggestionParameter.setStartPointId(getNodeId(pathSuggestionParameter.getStartPointId()));
         pathSuggestionParameter.setEndPointId(getNodeId(pathSuggestionParameter.getEndPointId()));
-        return defaultPathFindingService.findPath(pathSuggestionParameter);
+        return defaultPathFindingService.findPath(pathSuggestionParameter, pathSuggestionParameter.getModelName());
     }
 }

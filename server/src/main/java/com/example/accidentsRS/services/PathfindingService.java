@@ -6,5 +6,5 @@ import com.example.accidentsRS.model.Location;
 import java.util.List;
 
 public interface PathfindingService {
-    List<Location> findPath(PathSuggestionParameterWrapper pathSuggestionParameterWrapper);
+    List<Location> findPath(PathSuggestionParameterWrapper pathSuggestionParameterWrapper, String modelName);
 }

@@ -49,7 +49,7 @@
         </div>
       </div>
 
-      <!-- Show/Hide Risk -->
+      <!-- Show/Hide Predictions -->
       <div class="nav-item active nav-switches">
         <div class="form-inline">
           <div class="custom-control custom-switch my-lg-2">
@@ -57,6 +57,16 @@
               onchange="updateShowOrHideRiskHeatmap()">
             <label id="showHideRiskText" class="custom-control-label" for="showHideRiskSwitch">Risk Heatmap</label>
           </div>
+        </div>
+      </div>
+      <li class="nav-item inactive">
+        <span class="nav-link">Select predictor: </span>
+      </li>
+      <div class="navbar-nav">
+        <div class="nav-item active">
+          <select class="form-control form-select form-select-sm" id="predictor-for-risk">
+            <option value="dummy">Loading</option>
+          </select>
         </div>
       </div>
     </div>

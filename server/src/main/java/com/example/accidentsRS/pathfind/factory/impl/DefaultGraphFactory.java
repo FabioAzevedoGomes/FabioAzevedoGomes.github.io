@@ -1,6 +1,7 @@
 package com.example.accidentsRS.pathfind.factory.impl;
 
 import com.example.accidentsRS.dao.MapDao;
+import com.example.accidentsRS.dao.PredictorDao;
 import com.example.accidentsRS.pathfind.factory.GraphFactory;
 import com.example.accidentsRS.pathfind.graph.AbstractGraph;
 import com.example.accidentsRS.pathfind.graph.Graph;
@@ -17,22 +18,24 @@ public class DefaultGraphFactory implements GraphFactory {
     @Autowired
     AutowireCapableBeanFactory beanFactory;
 
-    protected Graph setGraphBeans(final AbstractGraph graph) {
+    protected Graph setGraphBeans(final AbstractGraph graph, final String modelName) {
         graph.setMapDao(beanFactory.getBean(MapDao.class));
+        graph.setPredictorDao(beanFactory.getBean(PredictorDao.class));
+        graph.setModelName(modelName);
         return graph;
     }
 
     @Override
-    public Graph getChunkedGraph() {
-        return setGraphBeans(new ChunkedHashGraph());
+    public Graph getChunkedGraph(final String modelName) {
+        return setGraphBeans(new ChunkedHashGraph(), modelName);
     }
 
     @Override
     public Graph getCompleteGraph() {
-        return setGraphBeans(new CompleteHashGraph());
+        return setGraphBeans(new CompleteHashGraph(), null);
     }
 
     public Graph getDatabaseGraph() {
-        return setGraphBeans(new DatabaseGraph());
+        return setGraphBeans(new DatabaseGraph(), null);
     }
 }

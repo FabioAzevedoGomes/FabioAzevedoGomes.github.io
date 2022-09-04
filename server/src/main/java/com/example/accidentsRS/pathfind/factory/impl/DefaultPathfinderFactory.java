@@ -16,8 +16,8 @@ public class DefaultPathfinderFactory implements PathfinderFactory {
     AutowireCapableBeanFactory beanFactory;
 
     @Override
-    public PathFinder getAStarPathfinder() {
-        final AbstractPathFinder pathFinder = new AStarPathFinder();
+    public PathFinder getAStarPathfinder(final String modelName) {
+        final AbstractPathFinder pathFinder = new AStarPathFinder(modelName);
         pathFinder.setDefaultGraphFactory(beanFactory.getBean(GraphFactory.class));
         return pathFinder;
     }

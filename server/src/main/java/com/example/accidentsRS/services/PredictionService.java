@@ -10,4 +10,5 @@ public interface PredictionService {
     void savePredictor(Predictor predictor, List<Region> regionList);
     List<Region> forecastTodayUsing(String modelName);
     float predictRiskAtPointUsing(Location point, String modelName);
+    List<String> getPredictorNames();
 }

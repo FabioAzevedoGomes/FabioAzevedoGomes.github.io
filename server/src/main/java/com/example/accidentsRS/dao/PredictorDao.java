@@ -16,4 +16,5 @@ public interface PredictorDao {
     void savePredictor(Predictor predictor, List<Region> regionList);
     Region getRegionOfPointInModel(Location point, String modelName);
     void updateRegionRiskIndexes(List<Region> regionList);
+    List<String> getPredictorNames();
 }

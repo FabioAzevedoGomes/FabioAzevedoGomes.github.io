@@ -32,9 +32,18 @@ public class PredictionEndpoint {
         return defaultPredictionFacade.forecastToday();
     }
 
+    @RequestMapping(value = "/model/predict/with", method = RequestMethod.POST)
+    public List<Region> predictToday(@RequestBody final String model) {
+        return defaultPredictionFacade.forecastTodayUsing(model);
+    }
+
     @RequestMapping(value = "/model/predict/point", method = RequestMethod.POST)
     public float predictPoint(@RequestBody final Location location) {
         return defaultPredictionFacade.predictForPoint(location);
     }
 
+    @RequestMapping(value = "model/get/predictors", method = RequestMethod.GET)
+    public List<String> getAvailablePredictors() {
+        return defaultPredictionFacade.getPredictorNames();
+    }
 }

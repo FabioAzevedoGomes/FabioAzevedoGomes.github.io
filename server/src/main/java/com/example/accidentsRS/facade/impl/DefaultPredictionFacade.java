@@ -85,6 +85,11 @@ public class DefaultPredictionFacade implements PredictionFacade {
         return predictForPointUsing(point, getDefaultModel());
     }
 
+    @Override
+    public List<String> getPredictorNames() {
+        return defaultPredictionService.getPredictorNames();
+    }
+
     public String getDefaultModel() {
         return defaultModel;
     }

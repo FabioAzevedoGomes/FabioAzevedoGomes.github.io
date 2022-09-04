@@ -15,6 +15,11 @@ import java.util.List;
 public class DefaultClimateDao extends AbstractDao<ClimateModel> implements ClimateDao {
 
     @Override
+    public void save(ClimateModel model) throws PersistenceException {
+
+    }
+
+    @Override
     public List<ClimateModel> get(final List<FilterWrapperModel> filters) {
         return super.get(filters, ClimateModel.class);
     }
@@ -39,6 +44,14 @@ public class DefaultClimateDao extends AbstractDao<ClimateModel> implements Clim
                         null,
                         ClimateModel.DATE_TIME + "." + DateTimeModel.DATE
                 ),
+                ClimateModel.class
+        );
+    }
+
+    @Override
+    public List<ClimateModel> getLatest() {
+        return mongoOperations.find(
+                defaultMongoQueryFactory.createLatestQuery(),
                 ClimateModel.class
         );
     }

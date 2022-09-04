@@ -76,12 +76,7 @@ public class AggregatePredictorModel {
     }
 
     public float predict(final INDArray features, final Region region) {
-        final Location center = region.getNormalizedCenter();
-        final INDArray[] inputData = new INDArray[]{
-                features,
-                Nd4j.create(new float[]{center.getLatitude(), center.getLongitude()})
-        };
-        return modelCompiled.output(inputData)[0].getFloat(0);
+        return modelCompiled.output(features)[0].getFloat(0);
     }
 
     public AggregatePredictorModel compile() throws PersistenceException, IOException, UnsupportedKerasConfigurationException, InvalidKerasConfigurationException {

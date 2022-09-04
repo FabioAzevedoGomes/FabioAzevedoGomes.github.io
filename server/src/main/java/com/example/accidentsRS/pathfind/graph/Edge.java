@@ -13,7 +13,7 @@ public class Edge {
 
     public Edge(final DirectionalStreetModel data, final Float weight) {
         this.data = data;
-        this.weight = weight;
+        this.weight = (1.0f + weight) * data.getLength();
     }
 
     public DirectionalStreetModel getData() {

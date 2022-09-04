@@ -19,4 +19,5 @@ public interface MongoQueryFactory {
     Query createRegionFromModelIntersectsPointQuery(Location point, String modelName);
     Query createWithinSpaceTimeQuery(Bounds bounds, Date date, String coordinateFieldName, String dateFieldName);
     Query createIdMatchQueryForRegions(final String regionId);
+    Query createLatestQuery();
 }

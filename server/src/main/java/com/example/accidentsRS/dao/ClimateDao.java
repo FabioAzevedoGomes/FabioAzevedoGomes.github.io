@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ClimateDao extends GenericDao<ClimateModel> {
     List<ClimateModel> getClimateOnDate(Date date);
+    List<ClimateModel> getLatest();
 }

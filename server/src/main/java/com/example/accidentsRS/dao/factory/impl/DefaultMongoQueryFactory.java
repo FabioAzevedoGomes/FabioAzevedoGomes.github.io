@@ -1,10 +1,7 @@
 package com.example.accidentsRS.dao.factory.impl;
 
 import com.example.accidentsRS.dao.factory.MongoQueryFactory;
-import com.example.accidentsRS.model.DirectionalStreetModel;
-import com.example.accidentsRS.model.ExtendedIntersectionModel;
-import com.example.accidentsRS.model.IntersectionModel;
-import com.example.accidentsRS.model.Location;
+import com.example.accidentsRS.model.*;
 import com.example.accidentsRS.model.filter.FilterWrapperModel;
 import com.example.accidentsRS.model.filter.OperationEnum;
 import com.example.accidentsRS.model.prediction.AggregatePredictorModel;
@@ -220,5 +217,13 @@ public class DefaultMongoQueryFactory implements MongoQueryFactory {
     @Override
     public Query createIdMatchQueryForRegions(final String regionId) {
         return Query.query(Criteria.where(Region.REGION_ID).is(regionId));
+    }
+
+    @Override
+    public Query createLatestQuery() {
+        Query query = new Query();
+        query.with(Sort.by(ClimateModel.DATE_TIME + "." + DateTimeModel.DATE).descending());
+        query.limit(1);
+        return query;
     }
 }

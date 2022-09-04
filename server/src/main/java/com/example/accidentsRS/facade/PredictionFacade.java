@@ -13,4 +13,5 @@ public interface PredictionFacade {
     List<Region> forecastToday();
     float predictForPointUsing(Location point, String modelName);
     float predictForPoint(Location point);
+    List<String> getPredictorNames();
 }

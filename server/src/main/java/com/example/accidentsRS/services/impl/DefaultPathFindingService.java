@@ -21,8 +21,9 @@ public class DefaultPathFindingService implements PathfindingService {
     PathfinderFactory defaultPathfinderFactory;
 
     @Override
-    public List<Location> findPath(final PathSuggestionParameterWrapper pathSuggestionParameterWrapper) {
-        final PathFinder pathFinderAlgorithm = defaultPathfinderFactory.getAStarPathfinder();
+    public List<Location> findPath(final PathSuggestionParameterWrapper pathSuggestionParameterWrapper,
+                                   final String modelName) {
+        final PathFinder pathFinderAlgorithm = defaultPathfinderFactory.getAStarPathfinder(modelName);
         List<Location> path;
         try {
             path = pathFinderAlgorithm.getPathBetween(

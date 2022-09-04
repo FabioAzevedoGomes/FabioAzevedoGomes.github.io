@@ -23,22 +23,8 @@ class RiskIndex(Feature):
     @classmethod
     def create_for(cls, accident_list: List[dict]) -> "RiskIndex":
         feature = RiskIndex()
-
-        if len(accident_list) > 0:
-            total_accidents: np.float64 = len(accident_list)
-            total_light_injuries: np.float64 = sum([accident['fatality']['light_injuries'] for accident in accident_list])
-            total_serious_injuries: np.float64 = sum([accident['fatality']['serious_injuries'] for accident in accident_list])
-            total_deaths: np.float64 = sum([accident['fatality']['deaths'] for accident in accident_list])
-            
-            feature.set_value(max(
-                min(((total_light_injuries / RiskIndex.MAX_LIGHT) / total_accidents), 1.0),
-                min(((total_serious_injuries / RiskIndex.MAX_SERIOUS) / total_accidents), 1.0),
-                min(((total_deaths / RiskIndex.MAX_DEATHS) / total_accidents), 1.0)
-            ))
-            #feature.set_value(RiskIndex.RISK_INDEX_MAX)
-
-        #feature.set_value(len(accident_list))
+        feature.set_value(len(accident_list))
         return feature
-    
+
     def normalize(self) -> np.float64:
         return self.normalize_to(self.normalized_range)

@@ -76,7 +76,7 @@ class AccidentsLayer extends BaseLayer {
     processClick(evt) {
         var feature = globalMap.map.forEachFeatureAtPixel(evt.pixel, function (feature) { return feature; });
         if (feature) {
-            displayAccidentDetails(feature.j.attributes['data']);
+            displayAccidentDetails(feature.A.attributes['data']);
         }
     }
 
@@ -138,7 +138,7 @@ class LocationSuggestionLayer extends BaseLayer {
     handleChoosingBetweenOptions(evt) {
         var feature = globalMap.map.forEachFeatureAtPixel(evt.pixel, function (feature) { return feature; });
         if (feature) {
-            globalPathfinder.setLocation(feature.j.attributes.data);
+            globalPathfinder.setLocation(feature.A.attributes.data);
         }
         this.state = this.States.Idle;
         globalMap.disableLayer(LayerNames.LocationSuggestion);
@@ -180,9 +180,13 @@ class PathViewingLayer extends BaseLayer {
         // noop
     }
 
-    refresh(thenFunction) {
-        getPathBetweenPoints(globalPathfinder.getPoints()).then(points => {
+    getSelectedPredictor() {
+        return $("#predictor-for-risk")[0].selectedOptions[0].value
+    }
 
+    refresh(thenFunction) {
+        getPathBetweenPoints(globalPathfinder.getPoints(), this.getSelectedPredictor())
+          .then(points => {
             var projectedPoints = [];
             for (var i = 0; i < points.length; i++) {
                 if (points[i].longitude && points[i].latitude) {
@@ -245,9 +249,13 @@ class RiskHeatmapLayer extends BaseLayer {
         ];
     }
 
+    getSelectedPredictor() {
+        return $("#predictor-for-risk")[0].selectedOptions[0].value
+    }
+
     refresh(thenFunction) {
         if (this.shouldRefresh()) {
-            getRiskMap().then(regions => {
+            getRiskMap(this.getSelectedPredictor()).then(regions => {
                 let max = 1e-10
                 let min = 1
                 regions.forEach(region => {

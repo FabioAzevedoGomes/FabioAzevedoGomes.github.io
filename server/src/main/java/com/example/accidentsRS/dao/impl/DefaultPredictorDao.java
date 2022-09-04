@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,10 +50,12 @@ public class DefaultPredictorDao implements PredictorDao {
 
     @Override
     public Region getRegionOfPointInModel(final Location point, final String modelName) {
-        return mongoOperations.find(
+        List<Region> list = mongoOperations.find(
                 defaultMongoQueryFactory.createRegionFromModelIntersectsPointQuery(point, modelName),
                 Region.class
-        ).get(0);
+        );
+
+        return CollectionUtils.isEmpty(list) ? null : list.get(0);
     }
 
     public void updateRegionRiskIndexes(final List<Region> regionList) {
@@ -64,5 +67,14 @@ public class DefaultPredictorDao implements PredictorDao {
             );
         }
         bulkOperations.execute();
+    }
+
+    @Override
+    public List<String> getPredictorNames() {
+        return mongoOperations.findDistinct(
+                Predictor.NAME,
+                Predictor.class,
+                String.class
+        );
     }
 }

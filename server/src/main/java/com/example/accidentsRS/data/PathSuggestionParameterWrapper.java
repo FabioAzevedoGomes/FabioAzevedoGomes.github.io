@@ -5,6 +5,7 @@ public final class PathSuggestionParameterWrapper {
     private String startPointId;
     private String endPointId;
     private boolean considerAccidentPredictions;
+    private String modelName;
 
     public String getStartPointId() {
         return startPointId;
@@ -28,5 +29,13 @@ public final class PathSuggestionParameterWrapper {
 
     public void setConsiderAccidentPredictions(boolean considerAccidentPredictions) {
         this.considerAccidentPredictions = considerAccidentPredictions;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 }

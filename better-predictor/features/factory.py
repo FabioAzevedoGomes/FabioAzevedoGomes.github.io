@@ -1,3 +1,4 @@
+from typing import Tuple
 import numpy as np
 from typing import List
 import dateutil.parser
@@ -5,6 +6,8 @@ import dateutil.parser
 from dataset_objects.bbox import BoundingBox
 from dataset_objects.coordinates import Coordinates
 from features.accident.weekday import Weekday
+from features.geographical.latitude import Latitude
+from features.geographical.longitude import Longitude
 from remote.remote import Remote
 from features.accident.risk_index import RiskIndex
 from features.weather.precipitation import Precipitation
@@ -36,8 +39,9 @@ class Factory:
                           cells_height: int,
                           num_features: int,
                           cell_size: np.float64
-                         ) -> np.ndarray:
+                         ) -> Tuple[np.ndarray, np.ndarray]:
 
+        # [visibility, precipitation, weekday, lat, lon]
         feature_matrix = np.zeros(
             shape=(
                 cells_width,
@@ -46,34 +50,40 @@ class Factory:
             ),
             dtype=np.float64
         )
+        output_matrix = np.zeros(
+            shape=(
+                cells_width,
+                cells_height,
+            ),
+            dtype=np.float64
+        )
 
-        weekday = dateutil.parser.isoparse(date).weekday()
+        weather_list = Remote.get_weather_for_date(date)
+
+        date_visibility = Visibility.create_for(weather_list).normalize()
+        date_precipitation = Precipitation.create_for(weather_list).normalize()
+        date_weekday = Weekday.create_for(dateutil.parser.isoparse(date).weekday()).normalize()
+        
         accidents_list_per_region = [[[]  for y in range(cells_height)] for x in range(cells_width)]
-
-        total_acc = 0
 
         for accident in Remote.get_accidents_for_date(date):
             accident_location = Coordinates.from_dict(
                 accident['address']['location']
             )
-            total_acc += 1
+
             x, y = Factory.get_location_cell(accident_location, domain, cells_width, cells_height, cell_size)
             accidents_list_per_region[x][y].append(accident)
 
         for x in range(cells_width):
             for y in range(cells_height):
-                feature_matrix[x][y][0] = RiskIndex.create_for(accidents_list_per_region[x][y]).normalize()
-                feature_matrix[x][y][1] = Weekday.create_for(weekday).normalize()
+                # Features
+                feature_matrix[x][y][0] = date_visibility
+                feature_matrix[x][y][1] = date_precipitation
+                feature_matrix[x][y][2] = Weekday.create_for(date_weekday).normalize()
+                feature_matrix[x][y][3] = Latitude.create_for(regions[x][y].center, domain).normalize()
+                feature_matrix[x][y][4] = Longitude.create_for(regions[x][y].center, domain).normalize()
 
-        return feature_matrix, total_acc
+                # Expected output
+                output_matrix[x][y] = RiskIndex.create_for(accidents_list_per_region[x][y]).normalize()
 
-    @classmethod
-    def get_weather_features(cls, date: str):
-        features = np.zeros(shape=(2), dtype=np.float64)
-
-        weather_list = Remote.get_weather_for_date(date)
-
-        features[0] = Visibility.create_for(weather_list).normalize()
-        features[1] = Precipitation.create_for(weather_list).normalize()
-
-        return features
+        return feature_matrix, output_matrix

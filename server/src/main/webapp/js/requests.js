@@ -135,31 +135,43 @@ function getPointSuggestions(longitude, latitude) {
     });
 }
 
-function preparePointsForPathfind(points) {
+function preparePointsForPathfind(points, predictor) {
     outPoints = {};
     outPoints["startPointId"] = points[0]['externalId']
     outPoints["endPointId"] = points[1]['externalId']
     outPoints["considerAccidentPredictions"] = true
+    outPoints["modelName"] = predictor
     return JSON.stringify(outPoints);
 }
 
-function getPathBetweenPoints(points) {
+function getPathBetweenPoints(points, predictor) {
     return $.ajax('/map/path/suggest', {
         contentType: 'application/json',
         type: 'POST',
-        data: preparePointsForPathfind(points),
+        data: preparePointsForPathfind(points, predictor),
         error: function (result) {
             alert('Error predicting path from backend');
         }
     });
 }
 
-function getRiskMap() {
-    return $.ajax('/prediction/model/predict/today', {
+function getRiskMap(predictor) {
+    return $.ajax('/prediction/model/predict/with', {
+        contentType: 'application/text',
+        data: predictor,
+        type: 'POST',
+        error: function (result) {
+            alert('Error getting risk index from backend');
+        }
+    });
+}
+
+function getPredictors() {
+    return $.ajax('/prediction/model/get/predictors', {
         contentType: 'application/json',
         type: 'GET',
         error: function (result) {
-            alert('Error getting risk index from backend');
+            alert('Error getting predictors backend');
         }
     });
 }

@@ -27,6 +27,11 @@ public class AStarPathFinder extends AbstractPathFinder {
         super(graph);
     }
 
+    public AStarPathFinder(final String modelName) {
+        super();
+        setModelName(modelName);
+    }
+
     public AStarPathFinder() {
 
     }

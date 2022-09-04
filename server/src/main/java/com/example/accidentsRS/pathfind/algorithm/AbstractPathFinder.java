@@ -13,6 +13,7 @@ import java.util.List;
 public abstract class AbstractPathFinder implements PathFinder {
 
     private GraphFactory defaultGraphFactory;
+    private String modelName;
 
     protected static class SafeValueMap<S> extends HashMap<S, Float> {
         @Override
@@ -49,7 +50,7 @@ public abstract class AbstractPathFinder implements PathFinder {
     }
 
     protected void initializeAlgorithm(final String startId, final String endId) {
-        this.graph = getDefaultGraphFactory().getChunkedGraph();
+        this.graph = getDefaultGraphFactory().getChunkedGraph(this.modelName);
     }
 
     @Override
@@ -63,5 +64,13 @@ public abstract class AbstractPathFinder implements PathFinder {
 
     public void setDefaultGraphFactory(GraphFactory defaultGraphFactory) {
         this.defaultGraphFactory = defaultGraphFactory;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 }

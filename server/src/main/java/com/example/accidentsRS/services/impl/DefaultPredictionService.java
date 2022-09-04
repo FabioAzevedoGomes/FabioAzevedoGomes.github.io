@@ -69,4 +69,9 @@ public class DefaultPredictionService implements PredictionService {
         }
         return -1;
     }
+
+    @Override
+    public List<String> getPredictorNames() {
+        return defaultPredictorDao.getPredictorNames();
+    }
 }
