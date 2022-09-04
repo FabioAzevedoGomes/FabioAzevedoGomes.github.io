@@ -1,18 +1,18 @@
 package com.example.accidentsRS.model.prediction;
 
 import com.example.accidentsRS.exceptions.PersistenceException;
-import com.example.accidentsRS.model.Location;
 import org.bson.types.Binary;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.modelimport.keras.KerasModelImport;
 import org.deeplearning4j.nn.modelimport.keras.exceptions.InvalidKerasConfigurationException;
 import org.deeplearning4j.nn.modelimport.keras.exceptions.UnsupportedKerasConfigurationException;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.factory.Nd4j;
 import org.springframework.boot.system.ApplicationTemp;
+import org.springframework.data.annotation.Transient;
 
 import java.io.*;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AggregatePredictorModel {
@@ -27,6 +27,12 @@ public class AggregatePredictorModel {
     private ComputationGraph modelCompiled;
     public static final String POPULATED_DOMAIN = "populatedDomain";
     private List<Region> populatedDomain;
+
+    @Transient
+    private float max = 0.0f;
+
+    @Transient
+    private float min = 1.0f;
 
     public String getName() {
         return name;
@@ -76,7 +82,13 @@ public class AggregatePredictorModel {
     }
 
     public float predict(final INDArray features, final Region region) {
-        return modelCompiled.output(features)[0].getFloat(0);
+        float result = modelCompiled.output(features)[0].getFloat(0);
+        if (result > this.max) {
+            this.max = result;
+        } else if (result < this.min) {
+            this.min = result;
+        }
+        return result;
     }
 
     public AggregatePredictorModel compile() throws PersistenceException, IOException, UnsupportedKerasConfigurationException, InvalidKerasConfigurationException {
@@ -88,6 +100,20 @@ public class AggregatePredictorModel {
             this.modelCompiled = KerasModelImport.importKerasModelAndWeights(modelTempFile, false);
         }
         return this;
+    }
+
+    public float normalizeResult(final float value) {
+        if (this.max == 0.0f && this.min == 1.0f) {
+            this.populatedDomain.forEach(region -> {
+                if (region.getRisk() > this.max) {
+                    this.max = region.getRisk();
+                } else if (region.getRisk() < this.min) {
+                    this.min = region.getRisk();
+                }
+            });
+        }
+        float normalized = (value - this.min) / (this.max - this.min);
+        return normalized;
     }
 
     public boolean hasPredictedForToday() {

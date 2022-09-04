@@ -3,14 +3,13 @@ package com.example.accidentsRS.pathfind.graph;
 import com.example.accidentsRS.model.DirectionalStreetModel;
 
 public class Edge {
-    private static final Float PENALIZATION_BY_RISK = 100.0f;
 
     public DirectionalStreetModel data;
     public Float weight;
 
     public Edge(final DirectionalStreetModel data) {
         this.data = data;
-        this.weight = (1.0f + data.getRisk()) * PENALIZATION_BY_RISK * data.getLength();
+        this.weight = data.getLength();
     }
 
     public Edge(final DirectionalStreetModel data, final Float weight) {

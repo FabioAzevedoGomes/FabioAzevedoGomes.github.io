@@ -17,7 +17,11 @@ import static java.util.Objects.nonNull;
 public class ChunkedHashGraph extends AbstractInMemoryGraph {
 
     private static final Logger LOGGER = Logger.getLogger(ChunkedHashGraph.class.getName());
+    private static final Float PENALIZATION_BY_RISK = 10.0f;
 
+    private static final Float FIRST_LEVEL_RISK_PENALIZATION = 1.0f;
+    private static final Float SECOND_LEVEL_RISK_PENALIZATION = 2.0f;
+    private static final Float THIRD_LEVEL_RISK_PENALIZATION = 10.0f;
 
     protected void loadRegionAroundNode(final String nodeId) {
         populateExpansionResults(super.getMapDao().getRegionAroundIntersectionWithRisk(nodeId, this.getModelName()));
@@ -27,12 +31,25 @@ public class ChunkedHashGraph extends AbstractInMemoryGraph {
         populateExpansionResults(super.getMapDao().getRegionAroundStreetWithRisk(edgeId, this.getModelName()));
     }
 
+    protected float getEdgeWeight(final DirectionalStreetModel street) {
+        float normalizedRisk = getPredictiveModel().normalizeResult(street.getRisk());
+        float penalizationFactor = 0.0f;
+        if (normalizedRisk < 0.3f) {
+            penalizationFactor = FIRST_LEVEL_RISK_PENALIZATION;
+        } else if (normalizedRisk < 0.6f) {
+            penalizationFactor = SECOND_LEVEL_RISK_PENALIZATION;
+        } else {
+            penalizationFactor = THIRD_LEVEL_RISK_PENALIZATION;
+        }
+        return street.getLength() * (1.0f + (normalizedRisk * penalizationFactor));
+    }
+
     protected void populateExpansionResults(Pair<List<IntersectionModel>, List<DirectionalStreetModel>> expansionResults) {
         expansionResults.getFirst().forEach(intersection ->
                 loadedNodes.put(intersection.getExternalId(), new Node(intersection))
         );
         expansionResults.getSecond().forEach(street -> {
-            loadedEdges.put(street.getDirectionalId(), new Edge(street));
+            loadedEdges.put(street.getDirectionalId(), new Edge(street, getEdgeWeight(street)));
             loadedConnections.update(
                     street.getSourceIntersectionId(),
                     street.getDirectionalId(),

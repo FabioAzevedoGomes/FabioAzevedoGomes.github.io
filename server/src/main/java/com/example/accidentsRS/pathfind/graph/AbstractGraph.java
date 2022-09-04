@@ -2,12 +2,14 @@ package com.example.accidentsRS.pathfind.graph;
 
 import com.example.accidentsRS.dao.MapDao;
 import com.example.accidentsRS.dao.PredictorDao;
+import com.example.accidentsRS.model.prediction.AggregatePredictorModel;
 
 public abstract class AbstractGraph implements Graph {
 
     private MapDao mapDao;
     private PredictorDao predictorDao;
     private String modelName;
+    private AggregatePredictorModel predictiveModel;
 
     protected MapDao getMapDao() {
         return mapDao;
@@ -29,8 +31,21 @@ public abstract class AbstractGraph implements Graph {
         return modelName;
     }
 
-    public void setModelName(String modelName) {
+    public void setModelName(final String modelName) {
         this.modelName = modelName;
+        try {
+            this.setPredictiveModel(predictorDao.getPredictorByName(modelName));
+        } catch (Exception exception) {
+            // TODO
+        }
+    }
+
+    public AggregatePredictorModel getPredictiveModel() {
+        return predictiveModel;
+    }
+
+    public void setPredictiveModel(AggregatePredictorModel predictiveModel) {
+        this.predictiveModel = predictiveModel;
     }
 
     public abstract Node getNode(String nodeId);
