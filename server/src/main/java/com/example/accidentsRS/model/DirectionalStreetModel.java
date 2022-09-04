@@ -1,6 +1,7 @@
 package com.example.accidentsRS.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "streets")
@@ -19,6 +20,9 @@ public class DirectionalStreetModel extends GeoLocation {
     private String sourceIntersectionId;
     public static final String DESTINATION_INTERSECTION_ID = "destinationIntersectionId";
     private String destinationIntersectionId;
+
+    @Transient
+    private float risk;
 
     public String getId() {
         return id;
@@ -82,5 +86,13 @@ public class DirectionalStreetModel extends GeoLocation {
 
     public void setDestinationIntersectionId(String destinationIntersectionId) {
         this.destinationIntersectionId = destinationIntersectionId;
+    }
+
+    public float getRisk() {
+        return risk;
+    }
+
+    public void setRisk(float risk) {
+        this.risk = risk;
     }
 }

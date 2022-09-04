@@ -5,23 +5,23 @@ import java.util.List;
 public class Bounds {
 
     public static final String COORDINATES = "coordinates";
-    private List<List<Float>> coordinates;
+    private List<List<List<Float>>> coordinates;
     public static final String TYPE = "type";
     private String type = "Polygon";
 
     public Bounds() {
     }
 
-    public Bounds(List<List<Float>> coordinates, String type) {
+    public Bounds(List<List<List<Float>>> coordinates, String type) {
         this.coordinates = coordinates;
         this.type = type;
     }
 
-    public List<List<Float>> getCoordinates() {
+    public List<List<List<Float>>> getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(List<List<Float>> coordinates) {
+    public void setCoordinates(List<List<List<Float>>> coordinates) {
         this.coordinates = coordinates;
     }
 

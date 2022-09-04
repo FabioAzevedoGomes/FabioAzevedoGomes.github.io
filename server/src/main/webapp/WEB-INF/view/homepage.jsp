@@ -14,7 +14,12 @@
         <div class="main">
             <%@ include file="topnav.jsp" %>
             <%@ include file="modals.jsp" %>
-            <div id="map" class="map"></div>
+            <div>
+                <div class="loader-container" style="display: none;" id="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+                <div id="map" class="map"></div>
+            </div>
             <%@ include file="filters.jsp" %>
             <%@ include file="accident-card.jsp" %>
             <%@ include file="about-card.jsp" %>

@@ -42,7 +42,7 @@ public class AStarPathFinder extends AbstractPathFinder {
         float lat2 = destinationLocation.getLatitude();
         float lon1 = nodeLocation.getLongitude();
         float lon2 = destinationLocation.getLongitude();
-        return (float) Math.sqrt((lat2 - lat1) * (lat2 - lat1) + (lon2 - lon1) * (lon2 - lon1));
+        return 0.0f;//(float) Math.sqrt((lat2 - lat1) * (lat2 - lat1) + (lon2 - lon1) * (lon2 - lon1));
     }
 
     @Override

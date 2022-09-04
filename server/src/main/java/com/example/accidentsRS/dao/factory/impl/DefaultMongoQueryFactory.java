@@ -173,14 +173,14 @@ public class DefaultMongoQueryFactory implements MongoQueryFactory {
         final GeoJsonPoint geoPoint = new GeoJsonPoint(new Point(point.getLatitude(), point.getLongitude()));
         return Query.query(
                 Criteria.where(Region.PREDICTOR).is(modelName).andOperator(
-                        Criteria.where(Region.BOUNDS + "." + Bounds.COORDINATES).intersects(geoPoint))
+                        Criteria.where(Region.BOUNDS).intersects(geoPoint))
         );
     }
 
     protected Criteria getWithinSpaceCriteria(final Bounds bounds, final String coordinateFieldName) {
         final Shape boundsShape = new Polygon(bounds.getCoordinates()
                 .stream()
-                .map(list -> new Point(list.get(0), list.get(1)))
+                .map(list -> new Point(list.get(0).get(0), list.get(0).get(1)))
                 .collect(Collectors.toList())
         );
         return Criteria.where(coordinateFieldName).within(boundsShape);

@@ -37,10 +37,20 @@ class PathFinder {
 
 globalPathfinder = new PathFinder();
 
+function showProcessingAnimation() {
+    $("#loading-spinner")[0].style = "display: block;"
+}
+
+function hideProcessingAnimation() {
+    $("#loading-spinner")[0].style = "display: none;"
+}
+
 function pathFindingProcess() {
     globalMap.disableLayer(LayerNames.LocationSuggestion);
     if (!globalPathfinder.isComplete()) {
         globalMap.enableLayer(LayerNames.LocationSuggestion);
         globalMap.centerOnLayer(LayerNames.LocationSuggestion);
+    } else {
+        showProcessingAnimation()
     }
 }

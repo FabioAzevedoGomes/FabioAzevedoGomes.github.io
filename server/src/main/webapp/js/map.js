@@ -187,21 +187,25 @@ class PathViewingLayer extends BaseLayer {
     refresh(thenFunction) {
         getPathBetweenPoints(globalPathfinder.getPoints(), this.getSelectedPredictor())
           .then(points => {
+            if (points.length == 0) {
+                alert("Sorry, we could not find a path between these points");
+            }
             var projectedPoints = [];
             for (var i = 0; i < points.length; i++) {
                 if (points[i].longitude && points[i].latitude) {
                     this.features.push(this.makePointFeature(null, points[i]));
                     if (i > 0) {
                         var lineDefinition = [
-                            [ol.proj.fromLonLat([points[i].latitude, points[i].longitude])],
-                            [ol.proj.fromLonLat([points[i-1].latitude, points[i-1].longitude])]
+                            [ol.proj.fromLonLat([points[i].longitude, points[i].latitude])],
+                            [ol.proj.fromLonLat([points[i-1].longitude, points[i-1].latitude])]
                         ];
-                        // this.features.push(new ol.Feature({ // TODO Lines don't work, openlayers sucks
+                        //this.features.push(new ol.Feature({ // TODO Lines don't work, openlayers sucks
                         //     geometry: new ol.geom.LineString(lineDefinition),
-                        // }));
+                        //}));
                     }
                 }
             }
+            hideProcessingAnimation()
         }).then(thenFunction);
     }
 }
@@ -267,7 +271,7 @@ class RiskHeatmapLayer extends BaseLayer {
                     }
                 });
                 regions.forEach(region => {
-                    let ordered = this.adjustCoordinates(region['bounds']['coordinates'])
+                    let ordered = this.adjustCoordinates(region['bounds']['coordinates'][0])
                     let regionProjection = [];
                     ordered.forEach(coord => {
                         regionProjection.push(ol.proj.fromLonLat([coord[1], coord[0]]))
