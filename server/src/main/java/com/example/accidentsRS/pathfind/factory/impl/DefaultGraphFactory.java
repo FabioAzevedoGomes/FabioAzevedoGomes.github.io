@@ -31,11 +31,11 @@ public class DefaultGraphFactory implements GraphFactory {
     }
 
     @Override
-    public Graph getCompleteGraph() {
-        return setGraphBeans(new CompleteHashGraph(), null);
+    public Graph getCompleteGraph(final String modelName) {
+        return setGraphBeans(new CompleteHashGraph(), modelName);
     }
 
-    public Graph getDatabaseGraph() {
-        return setGraphBeans(new DatabaseGraph(), null);
+    public Graph getDatabaseGraph(final String modelName) {
+        return setGraphBeans(new DatabaseGraph(), modelName);
     }
 }

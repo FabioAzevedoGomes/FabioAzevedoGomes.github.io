@@ -13,9 +13,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class DefaultPathFindingService implements PathfindingService {
+
+    private static final Logger LOGGER = Logger.getLogger(DefaultPathFindingService.class.getName());
 
     @Autowired
     PathfinderFactory defaultPathfinderFactory;
@@ -25,6 +29,7 @@ public class DefaultPathFindingService implements PathfindingService {
                                    final String modelName) {
         final PathFinder pathFinderAlgorithm = defaultPathfinderFactory.getAStarPathfinder(modelName);
         List<Location> path;
+        long startTime = System.nanoTime();
         try {
             path = pathFinderAlgorithm.getPathBetween(
                     pathSuggestionParameterWrapper.getStartPointId(),
@@ -33,6 +38,8 @@ public class DefaultPathFindingService implements PathfindingService {
         } catch (final NoSuchPathException noSuchPathException) {
             path = new ArrayList<>();
         }
+        long stopTime = System.nanoTime();
+        LOGGER.log(Level.INFO, "Path finding took " + (stopTime - startTime) + " nano seconds");
         return path;
     }
 }

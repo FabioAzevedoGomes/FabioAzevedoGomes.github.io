@@ -42,7 +42,7 @@ public class AStarPathFinder extends AbstractPathFinder {
         float lat2 = destinationLocation.getLatitude();
         float lon1 = nodeLocation.getLongitude();
         float lon2 = destinationLocation.getLongitude();
-        return 0.0f;//(float) Math.sqrt((lat2 - lat1) * (lat2 - lat1) + (lon2 - lon1) * (lon2 - lon1));
+        return (float) Math.sqrt((lat2 - lat1) * (lat2 - lat1) + (lon2 - lon1) * (lon2 - lon1));
     }
 
     @Override
@@ -89,7 +89,6 @@ public class AStarPathFinder extends AbstractPathFinder {
             if (nonNull(current) && current.equals(endNode)) {
                 return backtrack(current);
             }
-
             for (final Edge edge : graph.getNeighborEdges(current)) {
                 String neighbor = edge.getData().getDestinationIntersectionId();
                 float cost = edge.getWeight();

@@ -9,8 +9,12 @@ import com.example.accidentsRS.pathfind.graph.Graph;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class AbstractPathFinder implements PathFinder {
+
+    private static final Logger LOGGER = Logger.getLogger(AbstractPathFinder.class.getName());
 
     private GraphFactory defaultGraphFactory;
     private String modelName;
@@ -50,7 +54,10 @@ public abstract class AbstractPathFinder implements PathFinder {
     }
 
     protected void initializeAlgorithm(final String startId, final String endId) {
+        long startTime = System.nanoTime();
         this.graph = getDefaultGraphFactory().getChunkedGraph(this.modelName);
+        long stopTime = System.nanoTime();
+        LOGGER.log(Level.INFO, "Initializing graph took " + (stopTime - startTime) + " nano seconds");
     }
 
     @Override

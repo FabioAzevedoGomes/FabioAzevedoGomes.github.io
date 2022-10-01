@@ -95,4 +95,12 @@ public class DirectionalStreetModel extends GeoLocation {
     public void setRisk(float risk) {
         this.risk = risk;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof DirectionalStreetModel) {
+            return this.getDirectionalId().equals(((DirectionalStreetModel) o).getDirectionalId());
+        }
+        return false;
+    }
 }

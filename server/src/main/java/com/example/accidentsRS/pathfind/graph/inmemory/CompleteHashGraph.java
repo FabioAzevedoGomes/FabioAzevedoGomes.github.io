@@ -4,9 +4,13 @@ import com.example.accidentsRS.pathfind.graph.Edge;
 import com.example.accidentsRS.pathfind.graph.Node;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class CompleteHashGraph extends AbstractInMemoryGraph {
+
+    private static final Logger LOGGER = Logger.getLogger(CompleteHashGraph.class.getName());
 
     private boolean isInitialized;
 
@@ -14,8 +18,8 @@ public class CompleteHashGraph extends AbstractInMemoryGraph {
         super.getMapDao().getAllIntersections().forEach(intersection -> {
             this.loadedNodes.put(intersection.getExternalId(), new Node(intersection));
         });
-        super.getMapDao().getAllStreets().forEach(street -> {
-            this.loadedEdges.put(street.getDirectionalId(), new Edge(street));
+        super.getMapDao().getAllStreetsWithRisk(this.getModelName()).forEach(street -> {
+            this.loadedEdges.put(street.getDirectionalId(), new Edge(street, getEdgeWeight(street)));
             this.loadedConnections.update(
                     street.getSourceIntersectionId(),
                     street.getDirectionalId(),

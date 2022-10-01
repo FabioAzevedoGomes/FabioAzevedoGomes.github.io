@@ -12,6 +12,8 @@ public interface MapDao {
 
     DirectionalStreetModel getStreet(String directionalId);
 
+    DirectionalStreetModel getStreetWithRisk(String directionalId, String ModelName);
+
     List<IntersectionModel> getIntersections(List<String> externalIds);
 
     List<DirectionalStreetModel> getStreets(List<String> directionalIds);
@@ -27,6 +29,8 @@ public interface MapDao {
     List<IntersectionModel> getAllIntersections();
 
     List<DirectionalStreetModel> getAllStreets();
+
+    List<DirectionalStreetModel> getAllStreetsWithRisk(String modelName);
 
     Location getRegionCenterFor(Location location);
 }

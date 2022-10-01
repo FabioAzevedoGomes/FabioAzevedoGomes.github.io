@@ -19,6 +19,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +48,23 @@ public class DefaultMapDao implements MapDao {
                 Query.query(Criteria.where(DirectionalStreetModel.DIRECTIONAL_ID).is(directionalId)),
                 DirectionalStreetModel.class
         );
+    }
 
+    @Override
+    public DirectionalStreetModel getStreetWithRisk(final String directionalId, final String modelName) {
+        final DirectionalStreetModel street = mongoOperations.findOne(
+                Query.query(Criteria.where(DirectionalStreetModel.DIRECTIONAL_ID).is(directionalId)),
+                DirectionalStreetModel.class
+        );
+        if (street != null) {
+            final Region region = defaultPredictorDao.getRegionOfPointInModel(street.getLocation(), modelName);
+            if (region != null) {
+                street.setRisk(region.getRisk());
+            } else {
+                street.setRisk(0.0f);
+            }
+        }
+        return street;
     }
 
     @Override
@@ -77,22 +94,35 @@ public class DefaultMapDao implements MapDao {
         return getCircleAround(getStreet(directionalId), radiusKilometers);
     }
 
-    protected Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getForModelRegion(
-            final Region region
-    ) {
-        final Shape polygon = new GeoJsonPolygon(region.getBounds().getCoordinates().get(0).stream().map(list ->
-                new Point(list.get(1), list.get(0))).collect(Collectors.toList())
-        );
-        List<IntersectionModel> intersectionModels = mongoOperations.find(
+    protected List<IntersectionModel> getAllIntersectionsInPolygon(final Shape polygon) {
+        return mongoOperations.find(
                 Query.query(Criteria.where(IntersectionModel.LOCATION).within(polygon)
                 ),
                 IntersectionModel.class
         );
-        List<DirectionalStreetModel> streetModels = mongoOperations.find(
+    }
+
+    protected List<DirectionalStreetModel> getAllStreetsInPolygon(final Shape polygon) {
+        return mongoOperations.find(
                 Query.query(Criteria.where(DirectionalStreetModel.LOCATION).within(polygon)
                 ),
                 DirectionalStreetModel.class
         );
+    }
+
+    protected Shape createShapeFromRegion(final Region region) {
+        return new GeoJsonPolygon(region.getBounds().getCoordinates().get(0).stream().map(list ->
+                new Point(list.get(1), list.get(0))).collect(Collectors.toList())
+        );
+    }
+
+    protected Pair<List<IntersectionModel>, List<DirectionalStreetModel>> getForModelRegion(
+            final Region region
+    ) {
+        final Shape polygon = createShapeFromRegion(region);
+        final List<IntersectionModel> intersectionModels = getAllIntersectionsInPolygon(polygon);
+        final List<DirectionalStreetModel> streetModels = getAllStreetsInPolygon(polygon);
+
         if (!CollectionUtils.isEmpty(streetModels)) {
             streetModels.forEach(streetModel -> streetModel.setRisk(region.getRisk()));
         }
@@ -137,6 +167,28 @@ public class DefaultMapDao implements MapDao {
     @Override
     public List<DirectionalStreetModel> getAllStreets() {
         return mongoOperations.findAll(DirectionalStreetModel.class);
+    }
+
+    @Override
+    public List<DirectionalStreetModel> getAllStreetsWithRisk(final String modelName) {
+        final List<Region> allRegions = defaultPredictorDao.getPredictorRegions(modelName);
+        final List<DirectionalStreetModel> allStreets = new ArrayList<>();
+
+        allRegions.forEach(region -> {
+            Shape poly = createShapeFromRegion(region);
+            List<DirectionalStreetModel> streets = getAllStreetsInPolygon(poly);
+            streets.forEach(street -> street.setRisk(region.getRisk()));
+            allStreets.addAll(streets);
+        });
+
+        getAllStreets().stream()
+                .filter(street -> !allStreets.contains(street))
+                .forEach(street -> {
+                    street.setRisk(0.0f);
+                    allStreets.add(street);
+                });
+
+        return allStreets;
     }
 
     @Override

@@ -13,6 +13,8 @@ import org.deeplearning4j.nn.modelimport.keras.exceptions.UnsupportedKerasConfig
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -75,6 +77,14 @@ public class DefaultPredictorDao implements PredictorDao {
                 Predictor.NAME,
                 Predictor.class,
                 String.class
+        );
+    }
+
+    @Override
+    public List<Region> getPredictorRegions(final String modelName) {
+        return mongoOperations.find(
+                Query.query(Criteria.where(Region.PREDICTOR).is(modelName)),
+                Region.class
         );
     }
 }
